@@ -1,12 +1,43 @@
 set -x
-MODEL_PATH=Qwen/Qwen2.5-7B-Instruct-1M
+echo "=== Memory Check ==="
+echo "Physical node memory (from /proc/meminfo):"
+cat /proc/meminfo | grep MemTotal
+
+echo "Cgroup memory limit (Slurm allocation):"
+CGROUP_LIMIT=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+echo "$CGROUP_LIMIT bytes ($(echo "$CGROUP_LIMIT / 1024 / 1024 / 1024" | bc) GB)"
+
+echo "What Python/psutil sees:"
+python3 -c "import psutil; m=psutil.virtual_memory(); print(f'Total: {m.total/1024**3:.1f} GB, Available: {m.available/1024**3:.1f} GB, Used: {m.used/1024**3:.1f} GB ({m.percent}% used)')"
+
+export RAY_disable_cgroup_memory_limit=true
+export RAY_memory_usage_threshold=0.99
+export RAY_memory_monitor_refresh_ms=0
+# Use your persistent storage location
+# In your batch script, use your project directory for cache
+export HF_HOME=/workspace/.hf_cache
+export TRANSFORMERS_CACHE=/workspace/.hf_cache
+export HF_DATASETS_CACHE=/workspace/.hf_cache
+
+
+echo "HF Home:"
+echo $HF_HOME
+echo "Transformers Cache:"
+echo $TRANSFORMERS_CACHE
+echo "HF Datasets Cache:"
+echo $HF_DATASETS_CACHE
+
+echo "===================="
+
+
+MODEL_PATH=./checkpoints/3ppl/actor/global_step_400
 export VLLM_ATTENTION_BACKEND=XFORMERS
 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
     data.train_files=data/kk/instruct/3ppl/train.parquet \
     data.val_files=data/kk/instruct/3ppl/test.parquet \
-    data.train_batch_size=64 \
-    data.val_batch_size=32 \
+    data.train_batch_size=8 \
+    data.val_batch_size=4 \
     data.max_prompt_length=400 \
     data.max_response_length=2048 \
     actor_rollout_ref.model.path=$MODEL_PATH\
@@ -32,12 +63,12 @@ python3 -m verl.trainer.main_ppo \
     trainer.critic_warmup=0 \
     trainer.logger=['wandb'] \
     trainer.project_name='GRPO_logic_KK' \
-    trainer.experiment_name='Qwen-7B' \
+    trainer.experiment_name='Qwen-7B-3PPL-step-400' \
     trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
-    trainer.default_local_dir=./checkpoints \
+    trainer.default_local_dir=./checkpoints/3ppl \
     trainer.default_hdfs_dir=null \
-    trainer.save_freq=10 \
-    trainer.test_freq=10 \
-    trainer.total_epochs=5 $@ 2>&1 | tee grpo.log
+    trainer.save_freq=100 \
+    trainer.test_freq=100 \
+    trainer.total_epochs=2 $@ 2>&1 | tee grpo_3ppl.log
 

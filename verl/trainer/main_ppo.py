@@ -15,6 +15,9 @@
 Note that we don't combine the main with ray_trainer as ray_trainer is used by other main.
 """
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from verl import DataProto
 import torch
 from verl.utils.reward_score import gsm8k, math, multiply, countdown, kk

@@ -40,6 +40,7 @@ Logic-RL: Unleashing LLM Reasoning with Rule-Based Reinforcement Learning
 
 ## Installation
 
+### Option 1: Conda Environment
 ```bash
 conda create -n logic python=3.9
 pip install torch==2.4.0 --index-url https://download.pytorch.org/whl/cu121
@@ -47,6 +48,29 @@ pip3 install vllm==0.6.3 ray
 pip3 install flash-attn --no-build-isolation
 pip install -e .  # For verl integration
 pip install wandb IPython matplotlib
+```
+
+### Option 2: Enroot Container (Recommended for LRZ)
+
+#### Create Custom Container
+```bash
+# Import NVIDIA PyTorch container
+enroot import docker://nvcr.io/nvidia/pytorch:24.05-py3
+
+# Create container
+enroot create nvidia+pytorch+24.05-py3.sqsh
+
+# Install dependencies
+enroot start --rw --mount ./:/workspace nvidia+pytorch+24.05-py3 bash -c "cd /workspace && pip install -r requirements.txt"
+
+# Export custom container
+enroot export -o logic-rl-custom.sqsh nvidia+pytorch+24.05-py3
+```
+
+#### Use Custom Container
+```bash
+# Run training in container
+enroot start --rw --mount ./:/workspace logic-rl-custom.sqsh bash -c "cd /workspace && ./train_3ppl.sh"
 ```
 
 ---
