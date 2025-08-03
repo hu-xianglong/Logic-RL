@@ -34,7 +34,7 @@ echo $HF_DATASETS_CACHE
 echo "===================="
 
 
-MODEL_PATH=./checkpoints/mixed/actor/global_step_625
+MODEL_PATH=./checkpoints/mixed_4/actor/global_step_350
 export VLLM_ATTENTION_BACKEND=XFORMERS
 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
@@ -43,7 +43,7 @@ python3 -m verl.trainer.main_ppo \
     data.train_batch_size=4 \
     data.val_batch_size=4 \
     data.max_prompt_length=512 \
-    data.max_response_length=4096\
+    data.max_response_length=3800 \
     actor_rollout_ref.model.path=$MODEL_PATH\
     actor_rollout_ref.actor.optim.lr=3e-7 \
     actor_rollout_ref.model.use_remove_padding=True \
@@ -61,19 +61,19 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.temperature=0.7 \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \
-    actor_rollout_ref.rollout.n=16 \
+    actor_rollout_ref.rollout.n=12 \
     actor_rollout_ref.ref.log_prob_micro_batch_size=160 \
     actor_rollout_ref.ref.fsdp_config.param_offload=True \
     algorithm.kl_ctrl.kl_coef=0.001 \
     trainer.critic_warmup=0 \
     trainer.logger=['wandb'] \
     trainer.project_name='GRPO_logic_KK' \
-    trainer.experiment_name='Qwen-7B-mixed-625-0.7-5EP' \
+    trainer.experiment_name='Qwen-7B-mixed-1500-0.7-5EP' \
     trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
-    trainer.default_local_dir=./checkpoints/mixed_2 \
+    trainer.default_local_dir=./checkpoints/mixed_5_1500 \
     trainer.default_hdfs_dir=null \
     trainer.save_freq=25 \
     trainer.test_freq=25 \
-    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_2.log
+    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_5_1500.log
 

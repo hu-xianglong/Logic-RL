@@ -33,8 +33,10 @@ echo $HF_DATASETS_CACHE
 
 echo "===================="
 
+source .venv/bin/activate
 
-MODEL_PATH=./checkpoints/mixed/actor/global_step_625
+MODEL_PATH=Qwen/Qwen2.5-7B-Instruct-1M
+MODEL_PATH=./checkpoints/mixed_raw/actor/global_step_1900
 export VLLM_ATTENTION_BACKEND=XFORMERS
 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
@@ -68,12 +70,12 @@ python3 -m verl.trainer.main_ppo \
     trainer.critic_warmup=0 \
     trainer.logger=['wandb'] \
     trainer.project_name='GRPO_logic_KK' \
-    trainer.experiment_name='Qwen-7B-mixed-625-0.7-5EP' \
+    trainer.experiment_name='Qwen-7B-mixed-raw-1900' \
     trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
-    trainer.default_local_dir=./checkpoints/mixed_2 \
+    trainer.default_local_dir=./checkpoints/mixed_raw_1900 \
     trainer.default_hdfs_dir=null \
     trainer.save_freq=25 \
     trainer.test_freq=25 \
-    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_2.log
+    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_raw_1900.log
 

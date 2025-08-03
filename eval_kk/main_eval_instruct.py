@@ -47,7 +47,8 @@ def eval_subject(args, subject, llm, test_records, kk_proc, exist_result_records
     """Evaluate one subject."""
     cors = []
     start_index = len(exist_result_records)
-    print(f"Processing {subject} starting from index {start_index}")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Processing {subject} starting from index {start_index}")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Total records: {len(test_records)}, Existing results: {len(exist_result_records)}")
 
     # Prepare all prompts using multi-threading
     prompts, labels = [], []
@@ -98,10 +99,22 @@ def eval_subject(args, subject, llm, test_records, kk_proc, exist_result_records
 
 def load_limited_test_records(args, subject, exist_result_records):
     """Load limited test records based on given arguments."""
-    test_records = load_eval_records(args, subject)
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Loading test records for {subject}...")
+    try:
+        test_records = load_eval_records(args, subject)
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Found {len(test_records)} total test records")
+    except Exception as e:
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ❌ Failed to load test records: {e}")
+        return None
+        
     if args.limit is not None:
+        original_count = len(test_records)
         test_records = test_records.select(range(min(args.limit, len(test_records))))
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Limited to {len(test_records)} records (from {original_count})")
+        
         if args.limit <= len(exist_result_records):
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ⚠️  Limit ({args.limit}) <= existing results ({len(exist_result_records)})")
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ⚠️  All samples already processed, returning None")
             return None  # Already processed all samples
     return test_records
 
@@ -148,34 +161,120 @@ def main(args):
 
     print("Configuration:", args.config)
     print("Output Folder:", output_folder)
+    print("Accuracy Results File:", acc_fname)
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Starting evaluation process...")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] All results will be saved to: {output_folder}")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Individual result files: {output_folder}/<subject>.jsonl")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Final accuracy summary: {acc_fname}")
 
-    kk_proc = KKProcessor(cot=args.cot, no_linebreak=args.no_linebreak)
-    subjects = get_subjects_to_eval(args)
-    acc_results = load_previous_acc_results(acc_fname)
+    try:
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Initializing KK Processor...")
+        kk_proc = KKProcessor(cot=args.cot, no_linebreak=args.no_linebreak)
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ KK Processor initialized")
+        
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Getting subjects to evaluate...")
+        subjects = get_subjects_to_eval(args)
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ Found {len(subjects)} subjects: {subjects}")
+        
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Loading previous results...")
+        acc_results = load_previous_acc_results(acc_fname)
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ Loaded previous results")
 
-    # Initialize vLLM model
-    llm = LLM(
-        model=args.model,
-        tensor_parallel_size=args.ngpus,
-        max_model_len=args.max_token,
-        gpu_memory_utilization=0.85,
-        enforce_eager=False
-    )
+        # Initialize vLLM model
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Initializing vLLM model...")
+        print(f"  Model path: {args.model}")
+        print(f"  Max tokens: {args.max_token}")
+        print(f"  GPU memory utilization: 0.85")
+        print(f"  Tensor parallel size: {args.ngpus}")
+        
+        llm = LLM(
+            model=args.model,
+            tensor_parallel_size=args.ngpus,
+            max_model_len=args.max_token,
+            gpu_memory_utilization=0.85,
+            enforce_eager=False
+        )
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ vLLM model initialized successfully")
+        
+    except Exception as e:
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ❌ ERROR during initialization: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
     all_cors = []
-    for subject in subjects:
-        result_outfile = os.path.join(output_folder, f"{subject}.jsonl")
-        exist_result_records = load_jsonl(result_outfile)
-        test_records = load_limited_test_records(args, subject, exist_result_records)
-        if test_records is None:
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Starting evaluation for {len(subjects)} subjects...")
+    
+    for i, subject in enumerate(subjects):
+        try:
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] === Subject {i+1}/{len(subjects)}: {subject} ===")
+            result_outfile = os.path.join(output_folder, f"{subject}.jsonl")
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Looking for existing results at: {result_outfile}")
+            
+            if os.path.exists(result_outfile):
+                file_size = os.path.getsize(result_outfile) / 1024  # KB
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ Results file exists ({file_size:.1f} KB)")
+            else:
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ℹ️  No existing results file found")
+            
+            exist_result_records = load_jsonl(result_outfile)
+            exist_result_records = []
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Loaded {len(exist_result_records)} existing results")
+            
+            if len(exist_result_records) > 0:
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Sample existing result keys: {list(exist_result_records[0].keys()) if exist_result_records else 'None'}")
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Args limit: {args.limit}")
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Comparison: {args.limit} <= {len(exist_result_records)} = {args.limit <= len(exist_result_records)}")
+            
+            test_records = load_limited_test_records(args, subject, exist_result_records)
+            if test_records is None:
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ⚠️  No test records for {subject}, skipping...")
+                continue
+            
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Loaded {len(test_records)} test records")
+
+            cors, acc, result_records = eval_subject(args, subject, llm, test_records, kk_proc, exist_result_records)
+            
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Writing {len(result_records)} results to {result_outfile}")
+            write_jsonl(result_outfile, result_records)
+            all_cors.append(cors)
+            acc_results["subject"][subject] = acc
+            
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ Completed {subject}: accuracy = {acc:.4f}")
+            
+        except Exception as e:
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ❌ ERROR evaluating {subject}: {e}")
+            import traceback
+            traceback.print_exc()
+            # Continue with next subject instead of crashing
             continue
 
-        cors, acc, result_records = eval_subject(args, subject, llm, test_records, kk_proc, exist_result_records)
-        write_jsonl(result_outfile, result_records)
-        all_cors.append(cors)
-        acc_results["subject"][subject] = acc
-
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Saving final results...")
     save_final_acc_results(all_cors, acc_results, acc_fname)
+    
+    # Show final results summary
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] === RESULTS SUMMARY ===")
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Results directory: {output_folder}")
+    if os.path.exists(output_folder):
+        result_files = [f for f in os.listdir(output_folder) if f.endswith('.jsonl')]
+        for result_file in result_files:
+            full_path = os.path.join(output_folder, result_file)
+            if os.path.exists(full_path):
+                with open(full_path, 'r') as f:
+                    lines = sum(1 for _ in f)
+                file_size = os.path.getsize(full_path) / 1024  # KB
+                print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}]   📄 {result_file}: {lines} results, {file_size:.1f} KB")
+    
+    if os.path.exists(acc_fname):
+        print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] 📊 Accuracy summary: {acc_fname}")
+        try:
+            with open(acc_fname, 'r') as f:
+                acc_data = json.load(f)
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}]   Overall accuracy: {acc_data.get('weighted_accuracy', 'N/A')}")
+        except:
+            print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}]   Could not read accuracy file")
+    
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] ✅ Evaluation completed successfully!")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluation script for KK dataset")
@@ -201,3 +300,4 @@ if __name__ == "__main__":
     main(args)
 
     
+

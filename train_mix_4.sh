@@ -34,7 +34,7 @@ echo $HF_DATASETS_CACHE
 echo "===================="
 
 
-MODEL_PATH=./checkpoints/mixed/actor/global_step_625
+MODEL_PATH=./checkpoints/mixed_3/actor/global_step_325
 export VLLM_ATTENTION_BACKEND=XFORMERS
 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
@@ -43,7 +43,7 @@ python3 -m verl.trainer.main_ppo \
     data.train_batch_size=4 \
     data.val_batch_size=4 \
     data.max_prompt_length=512 \
-    data.max_response_length=4096\
+    data.max_response_length=3800 \
     actor_rollout_ref.model.path=$MODEL_PATH\
     actor_rollout_ref.actor.optim.lr=3e-7 \
     actor_rollout_ref.model.use_remove_padding=True \
@@ -68,12 +68,12 @@ python3 -m verl.trainer.main_ppo \
     trainer.critic_warmup=0 \
     trainer.logger=['wandb'] \
     trainer.project_name='GRPO_logic_KK' \
-    trainer.experiment_name='Qwen-7B-mixed-625-0.7-5EP' \
+    trainer.experiment_name='Qwen-7B-mixed-1150-0.7-5EP' \
     trainer.n_gpus_per_node=4 \
     trainer.nnodes=1 \
-    trainer.default_local_dir=./checkpoints/mixed_2 \
+    trainer.default_local_dir=./checkpoints/mixed_4 \
     trainer.default_hdfs_dir=null \
     trainer.save_freq=25 \
     trainer.test_freq=25 \
-    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_2.log
+    trainer.total_epochs=5 $@ 2>&1 | tee grpo_mixed_4.log
 
