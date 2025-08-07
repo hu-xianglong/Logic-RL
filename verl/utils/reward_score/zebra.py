@@ -210,72 +210,65 @@ def compare_solutions(model_answer: Dict, ground_truth: Dict) -> Tuple[bool, Dic
     return exact_match, comparison_details
 
 def compute_score(solution_str: str, ground_truth: Any, 
-                 correct_score: float = 3.0, 
-                 partial_score: float = 1.0, 
-                 format_score: float = 0.5, 
-                 wrong_score: float = 0.0) -> float:
-    """Compute reward score for zebra puzzle solutions.
+                 format_reward: int = 1,
+                 answer_reward: float = 1.0) -> float:
+    """Compute reward score for zebra puzzle solutions using the same system as kk.py.
     
     Args:
         solution_str: The complete solution string from the model
         ground_truth: Ground truth answer (dict or string representation)
-        correct_score: Score for completely correct answer
-        partial_score: Score for partially correct answer (good format, some correct)
-        format_score: Score for proper formatting but wrong answer
-        wrong_score: Score for incorrect or unparseable answer
+        format_reward: Points awarded/deducted for format correctness
+        answer_reward: Points awarded/deducted for answer correctness
         
     Returns:
-        Numerical score between 0 and correct_score
+        Total score (sum of format and answer rewards)
     """
     print("="*60)
     print("ZEBRA PUZZLE SCORING")
     print("="*60)
     
-    # Validate response structure
+    # Extract model answer
     extracted_answer, processed_str = extract_solution(solution_str)
-    if extracted_answer is None:
-        print("[Final Score] No extractable answer found")
-        return wrong_score
     
-    structure_valid = validate_response_structure(processed_str)
-    if not structure_valid:
-        print("[Final Score] Invalid response structure")
-        return wrong_score
-    
-    # Parse model answer
-    model_answer = parse_dict_answer(extracted_answer)
-    if model_answer is None:
-        print("[Final Score] Failed to parse model answer as dictionary")
-        return format_score  # Some credit for proper formatting
+    # Validate response structure
+    format_correct = validate_response_structure(processed_str)
+    format_score = format_reward if format_correct else -abs(format_reward)
+    print(f"\n  Format validation: {'PASS' if format_correct else 'FAIL'}")
+    print(f"  Format score: {format_score}")
     
     # Normalize ground truth
     normalized_truth = normalize_ground_truth(ground_truth)
     if normalized_truth is None:
         print("[Final Score] Failed to normalize ground truth")
-        return wrong_score
+        return -abs(format_reward) + (-2)
     
-    # Compare solutions
-    is_correct, comparison_details = compare_solutions(model_answer, normalized_truth)
-    
-    # Calculate final score
-    if is_correct:
-        final_score = correct_score
-        print(f"[Final Score] Completely correct: {final_score}")
-    elif comparison_details['categories_match']:
-        # Categories match but some answers wrong - partial credit
-        correct_categories = sum(comparison_details['partial_matches'].values())
-        total_categories = len(normalized_truth)
-        if correct_categories > 0:
-            partial_ratio = correct_categories / total_categories
-            final_score = partial_score * partial_ratio
-            print(f"[Final Score] Partial credit: {correct_categories}/{total_categories} categories correct = {final_score}")
+    # Validate answer content
+    answer_score = 0
+    if format_correct and extracted_answer:
+        model_answer = parse_dict_answer(extracted_answer)
+        if model_answer:
+            print(f"\n[Content Validation]")
+            is_correct, comparison_details = compare_solutions(model_answer, normalized_truth)
+            
+            if is_correct:
+                answer_score = 2
+                print("  Content validation: FULL MATCH")
+            else:
+                answer_score = -1.5
+                print("  Content validation: MISMATCH")
         else:
-            final_score = format_score
-            print(f"[Final Score] Proper format but all wrong: {final_score}")
+            answer_score = -2
+            print("  Fail to parse answer")
     else:
-        # Structure issues or major errors
-        final_score = format_score
-        print(f"[Final Score] Format issues: {final_score}")
-    
+        answer_score = -2
+        print("\n[Content Validation] Skipped due to format errors or missing answer")
+
+    total_score = format_score + answer_score
+    print("\n" + "-"*60)
+    print(f" Final Score ".center(60, '-'))
+    print(f"  Format: {format_score}")
+    print(f"  Answer: {answer_score}")
+    print(f"  Total: {total_score}")
     print("="*60)
-    return final_score
+
+    return total_score
