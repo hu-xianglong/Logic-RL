@@ -193,7 +193,16 @@ def compare_solutions(model_answer: Dict, ground_truth: Dict) -> Tuple[bool, Dic
         truth_list = ground_truth[category]
         
         # For Einstein puzzles, order matters (position-based)
-        category_match = model_list == truth_list
+        # Compare case-insensitively by converting both lists to lowercase
+        def normalize_list(lst):
+            if isinstance(lst, list):
+                return [str(item).lower().strip() if item is not None else '' for item in lst]
+            else:
+                return [str(lst).lower().strip() if lst is not None else '']
+        
+        model_list_normalized = normalize_list(model_list)
+        truth_list_normalized = normalize_list(truth_list)
+        category_match = model_list_normalized == truth_list_normalized
         comparison_details['partial_matches'][category] = category_match
         
         print(f"  {category}:")
