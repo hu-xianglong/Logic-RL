@@ -66,10 +66,7 @@ if __name__ == '__main__':
                 "ability": "logic",
                 "reward_model": {
                     "style": "rule",
-                    "ground_truth": {
-                        "final_answer": ground_truth,
-                        "rationale": example['rationale']
-                    }
+                    "ground_truth": ground_truth
                 },
                 "extra_info": {
                     'split': split,
