@@ -229,6 +229,7 @@ def compute_score(solution_str: str, ground_truth: Any,
     
     # Extract model answer
     extracted_answer, processed_str = extract_solution(solution_str)
+    print(f"\n[Model Response]\n{processed_str}")
     
     # Validate response structure
     format_correct = validate_response_structure(processed_str)
