@@ -20,7 +20,7 @@ load_dotenv()
 
 from verl import DataProto
 import torch
-from verl.utils.reward_score import gsm8k, math, multiply, countdown, kk
+from verl.utils.reward_score import gsm8k, math, multiply, countdown, kk, logic, zebra
 from verl.trainer.ppo.ray_trainer import RayPPOTrainer
 
 
@@ -35,6 +35,10 @@ def _select_rm_score_fn(data_source):
         return countdown.compute_score
     elif "kk" in data_source:
         return kk.compute_score
+    elif "loong_logic" in data_source:
+        return logic.compute_score
+    elif "zebra_puzzle" in data_source or "zebra" in data_source:
+        return zebra.compute_score
     else:
         raise NotImplementedError
 

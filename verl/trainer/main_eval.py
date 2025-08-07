@@ -19,7 +19,7 @@ The input is a parquet file that contains N generated sequences and (optional) t
 
 import hydra
 from verl.utils.fs import copy_local_path_from_hdfs
-from verl.utils.reward_score import math, gsm8k, kk
+from verl.utils.reward_score import math, gsm8k, kk, zebra
 import pandas as pd
 import numpy as np
 
@@ -29,6 +29,8 @@ def select_reward_fn(data_source):
         return math.compute_score
     if 'kk' in data_source:
         return kk.compute_score
+    if 'zebra_puzzle' in data_source or 'zebra' in data_source:
+        return zebra.compute_score
     else:
         raise NotImplementedError
 

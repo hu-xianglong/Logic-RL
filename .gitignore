@@ -113,3 +113,12 @@ tests/e2e/toy_examples/deepspeed/synchronous/output.txt
 *.swp
 data/kk/instruct/mixed/
 *.out
+*.whl
+*.sqsh
+*.tgz
+.conda/
+.env39/
+.hf_cache/
+Python-3.9.19/
+logic_env/
+miniconda.sh
