@@ -1,3 +1,6 @@
 [submodule "loong"]
 	path = loong
 	url = git@github.com:camel-ai/loong.git
+[submodule "loong_logic"]
+	path = loong_logic
+	url = https://github.com/camel-ai/loong_logic
