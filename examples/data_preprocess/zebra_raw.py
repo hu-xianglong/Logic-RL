@@ -79,14 +79,10 @@ def load_puzzles_from_batch_dirs(einstein_batch_dir, max_puzzles_per_batch=50):
             print(f"Loaded {len(puzzles)} puzzles from {batch_name}")
             
             for puzzle in puzzles:
-                # Parse solution from markdown table
-                table_markdown = puzzle.get('metadata', {}).get('table_markdown', '')
-                solution_dict = parse_solution_from_markdown(table_markdown)
-                
                 puzzle_data = {
                     'id': puzzle.get('id'),
                     'question': puzzle.get('problem'),
-                    'final_answer': solution_dict,
+                    'final_answer': puzzle.get('ground_truth_solution', {}),
                     'batch_source': batch_name,
                     'metadata': puzzle.get('metadata', {}),
                     'clues': puzzle.get('clues', [])
