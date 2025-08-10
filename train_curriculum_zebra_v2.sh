@@ -2,17 +2,38 @@
 # Curriculum training script for Zebra puzzles - Generate individual scripts for each level
 set -e  # Exit on any error
 
-# Configuration
-MODEL_PATH=Qwen/Qwen2.5-7B-Instruct-1M
-export VLLM_ATTENTION_BACKEND=XFORMERS
-EPOCHS_PER_LEVEL=30
-BASE_DATA_DIR="data/loong/zebra_raw_levels"
-BASE_CHECKPOINT_DIR="/dss/dssmcmlfs01/pn39qo/pn39qo-dss-0000/di35qir2/camel/loong_checkpoints/zebra_curriculum"
-BASE_LOG_DIR="./logs/zebra_curriculum"
+# Parse command line arguments
+START_LEVEL=""
+HELP_TEXT="Usage: $0 [OPTIONS]
+Options:
+  --start-level LEVEL    Start training from a specific level (e.g., n2_m3, n3_m4)
+  --help                 Show this help message
 
-# Create directories
-mkdir -p $BASE_CHECKPOINT_DIR
-mkdir -p $BASE_LOG_DIR
+Available levels (in training order):
+  n2_m2, n2_m3, n2_m4, n3_m3, n2_m5, n3_m4, n4_m3, n3_m5, n5_m3, n4_m4, n4_m5, n5_m4
+
+Examples:
+  $0                     # Train all levels from the beginning
+  $0 --start-level n2_m3 # Start training from n2_m3 level onwards
+"
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --start-level)
+            START_LEVEL="$2"
+            shift 2
+            ;;
+        --help|-h)
+            echo "$HELP_TEXT"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "$HELP_TEXT"
+            exit 1
+            ;;
+    esac
+done
 
 # Define levels in order of difficulty (sorted by difficulty score n×m)
 declare -a LEVELS=(
@@ -29,6 +50,40 @@ declare -a LEVELS=(
     "n4_m5:4x5"      # 4 attributes, 5 objects, difficulty 4×5=20
     "n5_m4:5x4"      # 5 attributes, 4 objects, difficulty 5×4=20
 )
+
+# Validate start level if provided (before doing anything else)
+if [ -n "$START_LEVEL" ]; then
+    FOUND_START_LEVEL=false
+    for level_info in "${LEVELS[@]}"; do
+        IFS=':' read -r level_name difficulty <<< "$level_info"
+        if [ "$level_name" = "$START_LEVEL" ]; then
+            FOUND_START_LEVEL=true
+            break
+        fi
+    done
+    
+    if [ "$FOUND_START_LEVEL" = false ]; then
+        echo "ERROR: Invalid start level '$START_LEVEL'"
+        echo "Available levels: $(printf '%s ' "${LEVELS[@]}" | sed 's/:[^ ]*//g')"
+        exit 1
+    fi
+    
+    echo "Starting training from level: $START_LEVEL"
+else
+    echo "Starting training from the beginning (all levels)"
+fi
+
+# Configuration
+MODEL_PATH=Qwen/Qwen2.5-7B-Instruct-1M
+export VLLM_ATTENTION_BACKEND=XFORMERS
+EPOCHS_PER_LEVEL=30
+BASE_DATA_DIR="data/loong/zebra_raw_levels"
+BASE_CHECKPOINT_DIR="/dss/dssmcmlfs01/pn39qo/pn39qo-dss-0000/di35qir2/camel/loong_checkpoints/zebra_curriculum"
+BASE_LOG_DIR="./logs/zebra_curriculum"
+
+# Create directories
+mkdir -p $BASE_CHECKPOINT_DIR
+mkdir -p $BASE_LOG_DIR
 
 # Function to get the latest checkpoint from a directory
 get_latest_checkpoint() {
@@ -239,6 +294,9 @@ echo "Starting Curriculum Training for Zebra Puzzles"
 echo "Total levels: ${#LEVELS[@]}"
 echo "Epochs per level: $EPOCHS_PER_LEVEL"
 echo "Base model: $MODEL_PATH"
+if [ -n "$START_LEVEL" ]; then
+    echo "Starting from level: $START_LEVEL"
+fi
 echo ""
 
 # Check if data directory exists
@@ -250,11 +308,67 @@ fi
 
 # Initialize previous checkpoint variable
 previous_checkpoint=""
+SKIP_UNTIL_START_LEVEL=false
+
+# If starting from a specific level, find the checkpoint from the previous level
+if [ -n "$START_LEVEL" ]; then
+    echo "Determining starting checkpoint for level $START_LEVEL..."
+    
+    # Find the index of the start level
+    start_index=-1
+    for i in "${!LEVELS[@]}"; do
+        IFS=':' read -r level_name difficulty <<< "${LEVELS[$i]}"
+        if [ "$level_name" = "$START_LEVEL" ]; then
+            start_index=$i
+            break
+        fi
+    done
+    
+    # If not starting from the first level, find the previous level's checkpoint
+    if [ $start_index -gt 0 ]; then
+        prev_index=$((start_index - 1))
+        IFS=':' read -r prev_level_name prev_difficulty <<< "${LEVELS[$prev_index]}"
+        echo "Looking for checkpoint from previous level: $prev_level_name"
+        
+        prev_checkpoint_dir="$BASE_CHECKPOINT_DIR/$prev_level_name"
+        if [ -d "$prev_checkpoint_dir" ]; then
+            previous_checkpoint=$(get_latest_checkpoint "$prev_checkpoint_dir")
+            if [ -n "$previous_checkpoint" ]; then
+                echo "Found previous checkpoint: $previous_checkpoint"
+            else
+                echo "WARNING: No checkpoint found for previous level $prev_level_name"
+                echo "Training $START_LEVEL will start from base model"
+            fi
+        else
+            echo "WARNING: Previous level checkpoint directory not found: $prev_checkpoint_dir"
+            echo "Training $START_LEVEL will start from base model"
+        fi
+        
+        SKIP_UNTIL_START_LEVEL=true
+    else
+        echo "Starting from first level, using base model"
+        SKIP_UNTIL_START_LEVEL=false
+    fi
+fi
 
 # Train each level in sequence
 for level_info in "${LEVELS[@]}"; do
     # Parse level name and difficulty
     IFS=':' read -r level_name difficulty <<< "$level_info"
+    
+    # Skip levels before the start level if specified
+    if [ "$SKIP_UNTIL_START_LEVEL" = "true" ]; then
+        if [ "$level_name" != "$START_LEVEL" ]; then
+            echo "Skipping level $level_name (before start level $START_LEVEL)"
+            continue
+        else
+            echo "Reached start level $level_name, beginning training..."
+            SKIP_UNTIL_START_LEVEL=false  # Reset flag so we continue with subsequent levels
+        fi
+    elif [ -n "$START_LEVEL" ]; then
+        # We've already started training and are processing subsequent levels
+        echo "Training level $level_name (continuing from start level $START_LEVEL)"
+    fi
     
     # Check if data exists for this level
     if [ ! -f "$BASE_DATA_DIR/$level_name/train.parquet" ]; then
