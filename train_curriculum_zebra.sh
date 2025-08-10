@@ -5,7 +5,7 @@ set -e  # Exit on any error
 # Configuration
 MODEL_PATH=Qwen/Qwen2.5-7B-Instruct-1M
 export VLLM_ATTENTION_BACKEND=XFORMERS
-EPOCHS_PER_LEVEL=5
+EPOCHS_PER_LEVEL=30
 BASE_DATA_DIR="data/loong/zebra_raw_levels"
 BASE_CHECKPOINT_DIR="/dss/dssmcmlfs01/pn39qo/pn39qo-dss-0000/di35qir2/camel/loong_checkpoints/zebra_curriculum"
 BASE_LOG_DIR="./logs/zebra_curriculum"
