@@ -164,6 +164,11 @@ def compare_solutions(model_answer: Dict, ground_truth: Dict) -> Tuple[bool, Dic
         'extra_categories': []
     }
     
+    # Check if inputs are dictionaries, return False if not
+    if not isinstance(model_answer, dict) or not isinstance(ground_truth, dict):
+        print(f"  [Error] Invalid types - model_answer: {type(model_answer)}, ground_truth: {type(ground_truth)}")
+        return False, comparison_details
+    
     # Check if categories match
     model_categories = set(model_answer.keys()) if model_answer else set()
     truth_categories = set(ground_truth.keys()) if ground_truth else set()
