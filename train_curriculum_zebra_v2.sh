@@ -109,80 +109,91 @@ generate_and_run_level() {
     local script_file="train_${level_name}_${difficulty}.sh"
     echo "Generating training script: $script_file"
     
-    cat > "$script_file" << EOF
+    cat > "$script_file" << 'SCRIPT_EOF'
 #!/bin/bash
-# Auto-generated training script for curriculum level: $level_name ($difficulty)
-# Generated on: $(date)
+# Auto-generated training script for curriculum level: LEVEL_NAME (DIFFICULTY)
+# Generated on: GENERATION_DATE
 set -x
 
 export VLLM_ATTENTION_BACKEND=XFORMERS
+export HYDRA_FULL_ERROR=1
 
 echo "============================================================"
-echo "Starting training for level $level_name (difficulty: $difficulty)"
-echo "Model path: $model_path"
-echo "Data: $BASE_DATA_DIR/$level_name/"
-echo "Epochs: $EPOCHS_PER_LEVEL"
-echo "Checkpoint will be saved to: $BASE_CHECKPOINT_DIR/$level_name/"
+echo "Starting training for level LEVEL_NAME (difficulty: DIFFICULTY)"
+echo "Model path: MODEL_PATH_VAR"
+echo "Data: DATA_DIR_VAR/LEVEL_NAME/"
+echo "Epochs: EPOCHS_VAR"
+echo "Checkpoint will be saved to: CHECKPOINT_DIR_VAR/LEVEL_NAME/"
 echo "============================================================"
 
-python3 -m verl.trainer.main_ppo \\
-    algorithm.adv_estimator=grpo \\
-    data.train_files="$BASE_DATA_DIR/$level_name/train.parquet" \\
-    data.val_files="$BASE_DATA_DIR/$level_name/test.parquet" \\
-    data.train_batch_size=8 \\
-    data.val_batch_size=8 \\
-    data.max_prompt_length=2000 \\
-    data.max_response_length=4096 \\
-    actor_rollout_ref.model.path="$model_path" \\
-    actor_rollout_ref.actor.optim.lr=3e-7 \\
-    actor_rollout_ref.model.use_remove_padding=True \\
-    actor_rollout_ref.actor.ppo_mini_batch_size=32 \\
-    actor_rollout_ref.actor.ppo_micro_batch_size=16 \\
-    actor_rollout_ref.actor.use_kl_loss=True \\
-    actor_rollout_ref.actor.kl_loss_coef=0.001 \\
-    actor_rollout_ref.actor.kl_loss_type=low_var_kl \\
-    actor_rollout_ref.model.enable_gradient_checkpointing=True \\
-    actor_rollout_ref.actor.fsdp_config.param_offload=True \\
-    actor_rollout_ref.actor.fsdp_config.grad_offload=True \\
-    actor_rollout_ref.actor.fsdp_config.optimizer_offload=True \\
-    actor_rollout_ref.rollout.log_prob_micro_batch_size=160 \\
-    actor_rollout_ref.rollout.tensor_model_parallel_size=1 \\
-    actor_rollout_ref.rollout.name=vllm \\
-    actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \\
-    actor_rollout_ref.rollout.temperature=0.7 \\
-    actor_rollout_ref.rollout.n=16 \\
-    actor_rollout_ref.ref.log_prob_micro_batch_size=160 \\
-    actor_rollout_ref.ref.fsdp_config.param_offload=True \\
-    algorithm.kl_ctrl.kl_coef=0.001 \\
-    trainer.critic_warmup=0 \\
-    trainer.logger=['wandb'] \\
-    trainer.project_name='GRPO_Zebra_Curriculum' \\
-    trainer.experiment_name="Qwen-7B-${level_name}-${difficulty}" \\
-    trainer.n_gpus_per_node=4 \\
-    trainer.nnodes=1 \\
-    trainer.default_local_dir="$BASE_CHECKPOINT_DIR/$level_name" \\
-    trainer.default_hdfs_dir=null \\
-    trainer.save_freq=5 \\
-    trainer.test_freq=5 \\
-    trainer.total_epochs=$EPOCHS_PER_LEVEL \\
-    \\\$@ 2>&1 | tee "$BASE_LOG_DIR/training_${level_name}_${difficulty}.log"
+python3 -m verl.trainer.main_ppo \
+    algorithm.adv_estimator=grpo \
+    data.train_files="DATA_DIR_VAR/LEVEL_NAME/train.parquet" \
+    data.val_files="DATA_DIR_VAR/LEVEL_NAME/test.parquet" \
+    data.train_batch_size=8 \
+    data.val_batch_size=8 \
+    data.max_prompt_length=2000 \
+    data.max_response_length=4096 \
+    actor_rollout_ref.model.path="MODEL_PATH_VAR" \
+    actor_rollout_ref.actor.optim.lr=3e-7 \
+    actor_rollout_ref.model.use_remove_padding=True \
+    actor_rollout_ref.actor.ppo_mini_batch_size=32 \
+    actor_rollout_ref.actor.ppo_micro_batch_size=16 \
+    actor_rollout_ref.actor.use_kl_loss=True \
+    actor_rollout_ref.actor.kl_loss_coef=0.001 \
+    actor_rollout_ref.actor.kl_loss_type=low_var_kl \
+    actor_rollout_ref.model.enable_gradient_checkpointing=True \
+    actor_rollout_ref.actor.fsdp_config.param_offload=True \
+    actor_rollout_ref.actor.fsdp_config.grad_offload=True \
+    actor_rollout_ref.actor.fsdp_config.optimizer_offload=True \
+    actor_rollout_ref.rollout.log_prob_micro_batch_size=160 \
+    actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
+    actor_rollout_ref.rollout.name=vllm \
+    actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \
+    actor_rollout_ref.rollout.temperature=0.7 \
+    actor_rollout_ref.rollout.n=16 \
+    actor_rollout_ref.ref.log_prob_micro_batch_size=160 \
+    actor_rollout_ref.ref.fsdp_config.param_offload=True \
+    algorithm.kl_ctrl.kl_coef=0.001 \
+    trainer.critic_warmup=0 \
+    trainer.logger=['wandb'] \
+    trainer.project_name='GRPO_Zebra_Curriculum' \
+    trainer.experiment_name="Qwen-7B-LEVEL_NAME-DIFFICULTY" \
+    trainer.n_gpus_per_node=4 \
+    trainer.nnodes=1 \
+    trainer.default_local_dir="CHECKPOINT_DIR_VAR/LEVEL_NAME" \
+    trainer.default_hdfs_dir=null \
+    trainer.save_freq=5 \
+    trainer.test_freq=5 \
+    trainer.total_epochs=EPOCHS_VAR \
+    $@ 2>&1 | tee "LOG_DIR_VAR/training_LEVEL_NAME_DIFFICULTY.log"
 
-training_exit_code=\\\${PIPESTATUS[0]}
-if [ \\\$training_exit_code -ne 0 ]; then
-    echo "ERROR: Training failed for level $level_name with exit code \\\$training_exit_code"
-    exit \\\$training_exit_code
+training_exit_code=${PIPESTATUS[0]}
+if [ $training_exit_code -ne 0 ]; then
+    echo "ERROR: Training failed for level LEVEL_NAME with exit code $training_exit_code"
+    exit $training_exit_code
 fi
 
 echo "============================================================"
-echo "Successfully completed training for level $level_name"
+echo "Successfully completed training for level LEVEL_NAME"
 echo "Checking for saved checkpoints..."
-ls -la "$BASE_CHECKPOINT_DIR/$level_name/" || echo "Checkpoint directory not found"
-if [ -d "$BASE_CHECKPOINT_DIR/$level_name/actor" ]; then
+ls -la "CHECKPOINT_DIR_VAR/LEVEL_NAME/" || echo "Checkpoint directory not found"
+if [ -d "CHECKPOINT_DIR_VAR/LEVEL_NAME/actor" ]; then
     echo "Actor checkpoints:"
-    ls -la "$BASE_CHECKPOINT_DIR/$level_name/actor/"
+    ls -la "CHECKPOINT_DIR_VAR/LEVEL_NAME/actor/"
 fi
 echo "============================================================"
-EOF
+SCRIPT_EOF
+
+    # Replace placeholders with actual values
+    sed -i "s|LEVEL_NAME|$level_name|g" "$script_file"
+    sed -i "s|DIFFICULTY|$difficulty|g" "$script_file"
+    sed -i "s|MODEL_PATH_VAR|$model_path|g" "$script_file"
+    sed -i "s|DATA_DIR_VAR|$BASE_DATA_DIR|g" "$script_file"
+    sed -i "s|CHECKPOINT_DIR_VAR|$BASE_CHECKPOINT_DIR|g" "$script_file"
+    sed -i "s|LOG_DIR_VAR|$BASE_LOG_DIR|g" "$script_file"
+    sed -i "s|EPOCHS_VAR|$EPOCHS_PER_LEVEL|g" "$script_file"
+    sed -i "s|GENERATION_DATE|$(date)|g" "$script_file"
     
     # Make script executable
     chmod +x "$script_file"
