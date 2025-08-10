@@ -4,7 +4,7 @@
   "m_objects": 4,
   "difficulty_score": 20,
   "batch_source": "n5_m4",
-  "total_puzzles": 10,
-  "train_samples": 8,
-  "test_samples": 2
+  "total_puzzles": 50,
+  "train_samples": 40,
+  "test_samples": 10
 }
