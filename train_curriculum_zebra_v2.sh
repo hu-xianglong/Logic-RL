@@ -163,8 +163,8 @@ python3 -m verl.trainer.main_ppo \
     trainer.nnodes=1 \
     trainer.default_local_dir="CHECKPOINT_DIR_VAR/LEVEL_NAME" \
     trainer.default_hdfs_dir=null \
-    trainer.save_freq=5 \
-    trainer.test_freq=5 \
+    trainer.save_freq=50 \
+    trainer.test_freq=50 \
     trainer.total_epochs=EPOCHS_VAR \
     $@ 2>&1 | tee "LOG_DIR_VAR/training_LEVEL_NAME_DIFFICULTY.log"
 
