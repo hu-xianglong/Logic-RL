@@ -33,14 +33,40 @@ declare -a LEVELS=(
 # Function to get the latest checkpoint from a directory
 get_latest_checkpoint() {
     local checkpoint_dir=$1
+    echo "DEBUG get_latest_checkpoint: Checking directory: $checkpoint_dir" >&2
+    
     if [ -d "$checkpoint_dir" ]; then
-        latest_checkpoint=$(find "$checkpoint_dir" -name "epoch_*" -type d | sort -V | tail -1)
-        if [ -n "$latest_checkpoint" ]; then
+        echo "DEBUG get_latest_checkpoint: Directory exists" >&2
+        
+        # Look for actor/global_step_* directories (actual checkpoint structure)
+        actor_dir="$checkpoint_dir/actor"
+        if [ -d "$actor_dir" ]; then
+            echo "DEBUG get_latest_checkpoint: Found actor directory: $actor_dir" >&2
+            global_step_dirs=$(find "$actor_dir" -maxdepth 1 -name "global_step_*" -type d 2>/dev/null | sort -t_ -k3 -n)
+            echo "DEBUG get_latest_checkpoint: Found global_step dirs: $global_step_dirs" >&2
+            
+            if [ -n "$global_step_dirs" ]; then
+                latest_checkpoint=$(echo "$global_step_dirs" | tail -1)
+                echo "DEBUG get_latest_checkpoint: Latest checkpoint: $latest_checkpoint" >&2
+                echo "$latest_checkpoint"
+                return
+            fi
+        fi
+        
+        # Fallback: Look for epoch_* directories
+        epoch_dirs=$(find "$checkpoint_dir" -maxdepth 1 -name "epoch_*" -type d 2>/dev/null | sort -V)
+        echo "DEBUG get_latest_checkpoint: Found epoch dirs: $epoch_dirs" >&2
+        
+        if [ -n "$epoch_dirs" ]; then
+            latest_checkpoint=$(echo "$epoch_dirs" | tail -1)
+            echo "DEBUG get_latest_checkpoint: Latest checkpoint: $latest_checkpoint" >&2
             echo "$latest_checkpoint"
         else
+            echo "DEBUG get_latest_checkpoint: No checkpoints found" >&2
             echo ""
         fi
     else
+        echo "DEBUG get_latest_checkpoint: Directory does not exist: $checkpoint_dir" >&2
         echo ""
     fi
 }
@@ -63,61 +89,9 @@ train_level() {
     if [ -n "$resume_checkpoint" ] && [ -d "$resume_checkpoint" ]; then
         echo "Resuming from checkpoint: $resume_checkpoint"
         checkpoint_args="actor_rollout_ref.model.path=$resume_checkpoint"
-        
-        # Log checkpoint info to Python for verification
-        python3 -c "
-import os
-import json
-from datetime import datetime
-
-checkpoint_path = '$resume_checkpoint'
-level_name = '$level_name'
-difficulty = '$difficulty'
-
-print(f'[CHECKPOINT INFO] Level: {level_name}')
-print(f'[CHECKPOINT INFO] Difficulty: {difficulty}')
-print(f'[CHECKPOINT INFO] Using checkpoint: {checkpoint_path}')
-
-if os.path.exists(checkpoint_path):
-    # Check if it's a valid checkpoint directory
-    config_path = os.path.join(checkpoint_path, 'config.json')
-    if os.path.exists(config_path):
-        try:
-            with open(config_path, 'r') as f:
-                config = json.load(f)
-            print(f'[CHECKPOINT INFO] Checkpoint config found: {config_path}')
-        except:
-            print(f'[CHECKPOINT INFO] Warning: Could not read checkpoint config')
-    
-    # List contents of checkpoint directory
-    contents = os.listdir(checkpoint_path)
-    print(f'[CHECKPOINT INFO] Checkpoint contents: {contents}')
-    
-    # Check modification time
-    mtime = os.path.getmtime(checkpoint_path)
-    mtime_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S')
-    print(f'[CHECKPOINT INFO] Checkpoint last modified: {mtime_str}')
-else:
-    print(f'[CHECKPOINT INFO] ERROR: Checkpoint path does not exist!')
-    
-print(f'[CHECKPOINT INFO] ==========================================')
-"
     else
         echo "Starting from base model: $MODEL_PATH"
         checkpoint_args="actor_rollout_ref.model.path=$MODEL_PATH"
-        
-        # Log base model info
-        python3 -c "
-model_path = '$MODEL_PATH'
-level_name = '$level_name'
-difficulty = '$difficulty'
-
-print(f'[CHECKPOINT INFO] Level: {level_name}')
-print(f'[CHECKPOINT INFO] Difficulty: {difficulty}')
-print(f'[CHECKPOINT INFO] Using base model: {model_path}')
-print(f'[CHECKPOINT INFO] This is the first level in curriculum')
-print(f'[CHECKPOINT INFO] ==========================================')
-"
     fi
     
     # Create level-specific directories
@@ -162,8 +136,8 @@ print(f'[CHECKPOINT INFO] ==========================================')
         trainer.nnodes=1 \
         trainer.default_local_dir="$BASE_CHECKPOINT_DIR/$level_name" \
         trainer.default_hdfs_dir=null \
-        trainer.save_freq=1 \
-        trainer.test_freq=1 \
+        trainer.save_freq=25 \
+        trainer.test_freq=25 \
         trainer.total_epochs=$EPOCHS_PER_LEVEL \
         2>&1 | tee "$BASE_LOG_DIR/training_${level_name}_${difficulty}.log"
     
@@ -173,50 +147,6 @@ print(f'[CHECKPOINT INFO] ==========================================')
     fi
     
     echo "Completed training for level $level_name"
-    
-    # Log completion info and final checkpoint
-    python3 -c "
-import os
-import glob
-from datetime import datetime
-
-level_name = '$level_name'
-difficulty = '$difficulty'
-checkpoint_dir = '$BASE_CHECKPOINT_DIR/$level_name'
-
-print(f'[TRAINING COMPLETE] Level: {level_name} (difficulty: {difficulty})')
-print(f'[TRAINING COMPLETE] Checkpoint directory: {checkpoint_dir}')
-
-if os.path.exists(checkpoint_dir):
-    # Find all epoch checkpoints
-    epoch_dirs = glob.glob(os.path.join(checkpoint_dir, 'epoch_*'))
-    if epoch_dirs:
-        # Sort to get the latest epoch
-        epoch_dirs.sort()
-        latest_epoch = epoch_dirs[-1]
-        epoch_num = os.path.basename(latest_epoch)
-        
-        # Check modification time
-        mtime = os.path.getmtime(latest_epoch)
-        mtime_str = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S')
-        
-        print(f'[TRAINING COMPLETE] Latest checkpoint: {latest_epoch}')
-        print(f'[TRAINING COMPLETE] Final epoch: {epoch_num}')
-        print(f'[TRAINING COMPLETE] Saved at: {mtime_str}')
-        
-        # List checkpoint contents
-        if os.path.isdir(latest_epoch):
-            contents = os.listdir(latest_epoch)
-            print(f'[TRAINING COMPLETE] Checkpoint files: {contents}')
-    else:
-        print(f'[TRAINING COMPLETE] WARNING: No epoch checkpoints found!')
-        all_contents = os.listdir(checkpoint_dir) if os.path.exists(checkpoint_dir) else []
-        print(f'[TRAINING COMPLETE] Directory contents: {all_contents}')
-else:
-    print(f'[TRAINING COMPLETE] ERROR: Checkpoint directory does not exist!')
-
-print(f'[TRAINING COMPLETE] ==========================================')
-"
     echo ""
 }
 
@@ -252,13 +182,21 @@ for level_info in "${LEVELS[@]}"; do
     train_level "$level_name" "$difficulty" "$previous_checkpoint"
     
     # Update previous checkpoint to the latest from this level
+    echo "DEBUG: Looking for checkpoints in: $BASE_CHECKPOINT_DIR/$level_name"
+    ls -la "$BASE_CHECKPOINT_DIR/$level_name" || echo "Directory does not exist"
+    
     previous_checkpoint=$(get_latest_checkpoint "$BASE_CHECKPOINT_DIR/$level_name")
+    echo "DEBUG: get_latest_checkpoint returned: '$previous_checkpoint'"
     
     if [ -z "$previous_checkpoint" ]; then
         echo "WARNING: No checkpoint found after training $level_name"
+        echo "DEBUG: Checking if any files exist in checkpoint dir:"
+        find "$BASE_CHECKPOINT_DIR/$level_name" -type f 2>/dev/null | head -10
         previous_checkpoint=""
     else
         echo "Next level will resume from: $previous_checkpoint"
+        echo "DEBUG: Verifying checkpoint exists:"
+        ls -la "$previous_checkpoint" || echo "Checkpoint path does not exist!"
     fi
     
     echo "----------------------------------------"
