@@ -86,9 +86,16 @@ train_level() {
     
     # Prepare checkpoint arguments
     local checkpoint_args=""
-    if [ -n "$resume_checkpoint" ] && [ -d "$resume_checkpoint" ]; then
-        echo "Resuming from checkpoint: $resume_checkpoint"
-        checkpoint_args="actor_rollout_ref.model.path=$resume_checkpoint"
+    if [ -n "$resume_checkpoint" ]; then
+        if [ -d "$resume_checkpoint" ]; then
+            echo "Resuming from checkpoint: $resume_checkpoint"
+            checkpoint_args="actor_rollout_ref.model.path=$resume_checkpoint"
+        else
+            echo "ERROR: Expected checkpoint does not exist: $resume_checkpoint"
+            echo "This indicates a problem with the curriculum training chain."
+            echo "Cannot continue without proper checkpoint."
+            exit 1
+        fi
     else
         echo "Starting from base model: $MODEL_PATH"
         checkpoint_args="actor_rollout_ref.model.path=$MODEL_PATH"
@@ -189,14 +196,23 @@ for level_info in "${LEVELS[@]}"; do
     echo "DEBUG: get_latest_checkpoint returned: '$previous_checkpoint'"
     
     if [ -z "$previous_checkpoint" ]; then
-        echo "WARNING: No checkpoint found after training $level_name"
+        echo "ERROR: No checkpoint found after training $level_name"
         echo "DEBUG: Checking if any files exist in checkpoint dir:"
         find "$BASE_CHECKPOINT_DIR/$level_name" -type f 2>/dev/null | head -10
-        previous_checkpoint=""
+        echo "This is a critical error - training should have saved a checkpoint."
+        echo "Cannot continue curriculum training without proper checkpoints."
+        exit 1
     else
         echo "Next level will resume from: $previous_checkpoint"
         echo "DEBUG: Verifying checkpoint exists:"
-        ls -la "$previous_checkpoint" || echo "Checkpoint path does not exist!"
+        if [ -d "$previous_checkpoint" ]; then
+            ls -la "$previous_checkpoint"
+            echo "✓ Checkpoint verified and ready for next level"
+        else
+            echo "ERROR: Checkpoint path does not exist: $previous_checkpoint"
+            echo "Cannot continue curriculum training."
+            exit 1
+        fi
     fi
     
     echo "----------------------------------------"
