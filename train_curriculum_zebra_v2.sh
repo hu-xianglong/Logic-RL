@@ -42,12 +42,32 @@ get_latest_checkpoint() {
         actor_dir="$checkpoint_dir/actor"
         if [ -d "$actor_dir" ]; then
             echo "DEBUG get_latest_checkpoint: Found actor directory: $actor_dir" >&2
-            global_step_dirs=$(find "$actor_dir" -maxdepth 1 -name "global_step_*" -type d 2>/dev/null | sort -t_ -k3 -n)
-            echo "DEBUG get_latest_checkpoint: Found global_step dirs: $global_step_dirs" >&2
+            echo "DEBUG get_latest_checkpoint: Listing contents of actor directory:" >&2
+            ls -la "$actor_dir" >&2
+            
+            # Find global_step directories and sort them numerically by step number
+            global_step_dirs=$(find "$actor_dir" -maxdepth 1 -name "global_step_*" -type d 2>/dev/null | sort -V)
+            echo "DEBUG get_latest_checkpoint: Found global_step dirs (sorted): $global_step_dirs" >&2
             
             if [ -n "$global_step_dirs" ]; then
-                latest_checkpoint=$(echo "$global_step_dirs" | tail -1)
-                echo "DEBUG get_latest_checkpoint: Latest checkpoint: $latest_checkpoint" >&2
+                # Get the latest checkpoint by extracting step numbers and finding the maximum
+                latest_checkpoint=""
+                max_step=-1
+                
+                while IFS= read -r checkpoint_path; do
+                    if [ -n "$checkpoint_path" ]; then
+                        # Extract step number from path like /path/to/global_step_300
+                        step_num=$(basename "$checkpoint_path" | sed 's/global_step_//')
+                        echo "DEBUG get_latest_checkpoint: Found step: $step_num in path: $checkpoint_path" >&2
+                        
+                        if [ "$step_num" -gt "$max_step" ] 2>/dev/null; then
+                            max_step=$step_num
+                            latest_checkpoint="$checkpoint_path"
+                        fi
+                    fi
+                done <<< "$global_step_dirs"
+                
+                echo "DEBUG get_latest_checkpoint: Latest checkpoint (step $max_step): $latest_checkpoint" >&2
                 echo "$latest_checkpoint"
                 return
             fi
