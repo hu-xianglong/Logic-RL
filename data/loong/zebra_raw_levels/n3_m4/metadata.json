@@ -1,0 +1,10 @@
+{
+  "level": "n3_m4",
+  "n_attributes": 3,
+  "m_objects": 4,
+  "difficulty_score": 12,
+  "batch_source": "n3_m4",
+  "total_puzzles": 10,
+  "train_samples": 8,
+  "test_samples": 2
+}

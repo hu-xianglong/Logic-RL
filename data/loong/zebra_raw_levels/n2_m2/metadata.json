@@ -1,0 +1,10 @@
+{
+  "level": "n2_m2",
+  "n_attributes": 2,
+  "m_objects": 2,
+  "difficulty_score": 4,
+  "batch_source": "n2_m2",
+  "total_puzzles": 10,
+  "train_samples": 8,
+  "test_samples": 2
+}

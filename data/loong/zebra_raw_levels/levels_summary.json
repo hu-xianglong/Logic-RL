@@ -1,0 +1,77 @@
+{
+  "total_levels": 12,
+  "levels": {
+    "n2_m2": {
+      "n_attributes": 2,
+      "m_objects": 2,
+      "difficulty_score": 4,
+      "total_puzzles": 10
+    },
+    "n2_m3": {
+      "n_attributes": 2,
+      "m_objects": 3,
+      "difficulty_score": 6,
+      "total_puzzles": 10
+    },
+    "n2_m4": {
+      "n_attributes": 2,
+      "m_objects": 4,
+      "difficulty_score": 8,
+      "total_puzzles": 10
+    },
+    "n2_m5": {
+      "n_attributes": 2,
+      "m_objects": 5,
+      "difficulty_score": 10,
+      "total_puzzles": 10
+    },
+    "n3_m3": {
+      "n_attributes": 3,
+      "m_objects": 3,
+      "difficulty_score": 9,
+      "total_puzzles": 10
+    },
+    "n3_m4": {
+      "n_attributes": 3,
+      "m_objects": 4,
+      "difficulty_score": 12,
+      "total_puzzles": 10
+    },
+    "n3_m5": {
+      "n_attributes": 3,
+      "m_objects": 5,
+      "difficulty_score": 15,
+      "total_puzzles": 10
+    },
+    "n4_m3": {
+      "n_attributes": 4,
+      "m_objects": 3,
+      "difficulty_score": 12,
+      "total_puzzles": 10
+    },
+    "n4_m4": {
+      "n_attributes": 4,
+      "m_objects": 4,
+      "difficulty_score": 16,
+      "total_puzzles": 10
+    },
+    "n4_m5": {
+      "n_attributes": 4,
+      "m_objects": 5,
+      "difficulty_score": 20,
+      "total_puzzles": 10
+    },
+    "n5_m3": {
+      "n_attributes": 5,
+      "m_objects": 3,
+      "difficulty_score": 15,
+      "total_puzzles": 10
+    },
+    "n5_m4": {
+      "n_attributes": 5,
+      "m_objects": 4,
+      "difficulty_score": 20,
+      "total_puzzles": 10
+    }
+  }
+}
