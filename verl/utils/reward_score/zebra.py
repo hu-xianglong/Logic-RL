@@ -164,25 +164,6 @@ def compare_solutions(model_answer: Dict, ground_truth: Dict) -> Tuple[bool, Dic
         'extra_categories': []
     }
     
-    # Debug: Check types
-    print(f"  model_answer type: {type(model_answer)}, value: {model_answer}")
-    print(f"  ground_truth type: {type(ground_truth)}, value: {ground_truth}")
-    
-    # Handle edge case where model_answer might be a set (error case)
-    if isinstance(model_answer, set):
-        print("  [Error] model_answer is a set, converting to empty dict")
-        model_answer = {}
-    elif not isinstance(model_answer, dict):
-        print(f"  [Error] model_answer is not a dict: {type(model_answer)}, converting to empty dict")
-        model_answer = {}
-    
-    if isinstance(ground_truth, set):
-        print("  [Error] ground_truth is a set, converting to empty dict")
-        ground_truth = {}
-    elif not isinstance(ground_truth, dict):
-        print(f"  [Error] ground_truth is not a dict: {type(ground_truth)}, converting to empty dict")
-        ground_truth = {}
-    
     # Check if categories match
     model_categories = set(model_answer.keys()) if model_answer else set()
     truth_categories = set(ground_truth.keys()) if ground_truth else set()
@@ -275,7 +256,6 @@ def compute_score(solution_str: str, ground_truth: Any,
     answer_score = 0
     if format_correct and extracted_answer:
         model_answer = parse_dict_answer(extracted_answer)
-        print(f"  parse_dict_answer returned type: {type(model_answer)}, value: {model_answer}")
         if model_answer:
             print(f"\n[Content Validation]")
             is_correct, comparison_details = compare_solutions(model_answer, normalized_truth)
