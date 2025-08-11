@@ -10,7 +10,7 @@ Options:
   --help                 Show this help message
 
 Available levels (in training order):
-  n2_m2, n3_m2, n4_m2, n5_m2, n2_m3, n3_m3, n4_m3, n5_m3, n2_m4, n3_m4, n4_m4, n5_m4, n2_m5, n3_m5, n4_m5, n5_m5
+  n2_m2, n2_m3, n3_m3, n5_m3, n2_m4, n3_m4, n4_m4, n5_m4, n2_m5, n3_m5, n4_m5, n5_m5
 
 Examples:
   $0                     # Train all levels from the beginning
@@ -36,23 +36,24 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Define levels in order of difficulty (sorted by difficulty score n×m!)
+# Commented out levels with too similar difficulty to skip redundant training
 declare -a LEVELS=(
-    "n2_m2:2x2!"     # 2 attributes, 2 objects, difficulty 2×2!=4
-    "n3_m2:3x2!"     # 3 attributes, 2 objects, difficulty 3×2!=6
-    "n4_m2:4x2!"     # 4 attributes, 2 objects, difficulty 4×2!=8
-    "n5_m2:5x2!"     # 5 attributes, 2 objects, difficulty 5×2!=10
-    "n2_m3:2x3!"     # 2 attributes, 3 objects, difficulty 2×3!=12
-    "n3_m3:3x3!"     # 3 attributes, 3 objects, difficulty 3×3!=18
-    "n4_m3:4x3!"     # 4 attributes, 3 objects, difficulty 4×3!=24
-    "n5_m3:5x3!"     # 5 attributes, 3 objects, difficulty 5×3!=30
-    "n2_m4:2x4!"     # 2 attributes, 4 objects, difficulty 2×4!=48
-    "n3_m4:3x4!"     # 3 attributes, 4 objects, difficulty 3×4!=72
-    "n4_m4:4x4!"     # 4 attributes, 4 objects, difficulty 4×4!=96
-    "n5_m4:5x4!"     # 5 attributes, 4 objects, difficulty 5×4!=120
-    "n2_m5:2x5!"     # 2 attributes, 5 objects, difficulty 2×5!=240
-    "n3_m5:3x5!"     # 3 attributes, 5 objects, difficulty 3×5!=360
-    "n4_m5:4x5!"     # 4 attributes, 5 objects, difficulty 4×5!=480
-    "n5_m5:5x5!"     # 5 attributes, 5 objects, difficulty 5×5!=600
+    "n2_m2:2x2"      # 2 attributes, 2 objects, difficulty 2×2!=4
+    # "n3_m2:3x2"    # 3 attributes, 2 objects, difficulty 3×2!=6  [SKIPPED - too close to n2_m2]
+    # "n4_m2:4x2"    # 4 attributes, 2 objects, difficulty 4×2!=8  [SKIPPED - too close to n2_m2]
+    # "n5_m2:5x2"    # 5 attributes, 2 objects, difficulty 5×2!=10 [SKIPPED - too close to n2_m2]
+    "n2_m3:2x3"      # 2 attributes, 3 objects, difficulty 2×3!=12
+    "n3_m3:3x3"      # 3 attributes, 3 objects, difficulty 3×3!=18
+    # "n4_m3:4x3"    # 4 attributes, 3 objects, difficulty 4×3!=24 [SKIPPED - between n3_m3 and n5_m3]
+    "n5_m3:5x3"      # 5 attributes, 3 objects, difficulty 5×3!=30
+    "n2_m4:2x4"      # 2 attributes, 4 objects, difficulty 2×4!=48
+    "n3_m4:3x4"      # 3 attributes, 4 objects, difficulty 3×4!=72
+    "n4_m4:4x4"      # 4 attributes, 4 objects, difficulty 4×4!=96
+    "n5_m4:5x4"      # 5 attributes, 4 objects, difficulty 5×4!=120
+    "n2_m5:2x5"      # 2 attributes, 5 objects, difficulty 2×5!=240
+    "n3_m5:3x5"      # 3 attributes, 5 objects, difficulty 3×5!=360
+    "n4_m5:4x5"      # 4 attributes, 5 objects, difficulty 4×5!=480
+    "n5_m5:5x5"      # 5 attributes, 5 objects, difficulty 5×5!=600
 )
 
 # Validate start level if provided (before doing anything else)

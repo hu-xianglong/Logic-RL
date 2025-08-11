@@ -23,22 +23,24 @@
 
 ## Available Levels (in training order)
 
+*Note: Some levels with similar difficulty have been skipped to avoid redundant training*
+
 1. `n2_m2` - 2 attributes, 2 objects (difficulty: 2×2!=4)
-2. `n3_m2` - 3 attributes, 2 objects (difficulty: 3×2!=6)
-3. `n4_m2` - 4 attributes, 2 objects (difficulty: 4×2!=8)
-4. `n5_m2` - 5 attributes, 2 objects (difficulty: 5×2!=10)
-5. `n2_m3` - 2 attributes, 3 objects (difficulty: 2×3!=12)
-6. `n3_m3` - 3 attributes, 3 objects (difficulty: 3×3!=18)
-7. `n4_m3` - 4 attributes, 3 objects (difficulty: 4×3!=24)
-8. `n5_m3` - 5 attributes, 3 objects (difficulty: 5×3!=30)
-9. `n2_m4` - 2 attributes, 4 objects (difficulty: 2×4!=48)
-10. `n3_m4` - 3 attributes, 4 objects (difficulty: 3×4!=72)
-11. `n4_m4` - 4 attributes, 4 objects (difficulty: 4×4!=96)
-12. `n5_m4` - 5 attributes, 4 objects (difficulty: 5×4!=120)
-13. `n2_m5` - 2 attributes, 5 objects (difficulty: 2×5!=240)
-14. `n3_m5` - 3 attributes, 5 objects (difficulty: 3×5!=360)
-15. `n4_m5` - 4 attributes, 5 objects (difficulty: 4×5!=480)
-16. `n5_m5` - 5 attributes, 5 objects (difficulty: 5×5!=600)
+2. `n2_m3` - 2 attributes, 3 objects (difficulty: 2×3!=12)
+3. `n3_m3` - 3 attributes, 3 objects (difficulty: 3×3!=18)
+4. `n5_m3` - 5 attributes, 3 objects (difficulty: 5×3!=30)
+5. `n2_m4` - 2 attributes, 4 objects (difficulty: 2×4!=48)
+6. `n3_m4` - 3 attributes, 4 objects (difficulty: 3×4!=72)
+7. `n4_m4` - 4 attributes, 4 objects (difficulty: 4×4!=96)
+8. `n5_m4` - 5 attributes, 4 objects (difficulty: 5×4!=120)
+9. `n2_m5` - 2 attributes, 5 objects (difficulty: 2×5!=240)
+10. `n3_m5` - 3 attributes, 5 objects (difficulty: 3×5!=360)
+11. `n4_m5` - 4 attributes, 5 objects (difficulty: 4×5!=480)
+12. `n5_m5` - 5 attributes, 5 objects (difficulty: 5×5!=600)
+
+### Skipped Levels:
+- `n3_m2`, `n4_m2`, `n5_m2` (difficulty 6-10, too close to n2_m2)
+- `n4_m3` (difficulty 24, between n3_m3 and n5_m3)
 
 ## How it Works
 
