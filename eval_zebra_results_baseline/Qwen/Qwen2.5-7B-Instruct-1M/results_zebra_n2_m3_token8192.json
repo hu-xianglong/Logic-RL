@@ -1,0 +1,11 @@
+{
+  "levels": {
+    "n2_m3": {
+      "average_score": -0.325,
+      "accuracy": 0.05,
+      "total_samples": 20
+    }
+  },
+  "overall_average_score": -0.325,
+  "overall_accuracy": 0.05
+}
