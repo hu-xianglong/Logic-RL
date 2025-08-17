@@ -1,0 +1,95 @@
+[
+  {
+    "id": "evolved_0",
+    "puzzle_text": "You are given a logic puzzle involving two individuals residing in the same neighborhood. Each person possesses exactly one attribute from two different categories (such as fruit and vehicle). No two individuals share the same attribute from any category. Your aim is to determine which attributes belong to which person based on the provided clues. The clues outline intricate relationships between the individuals and their respective attributes. For example, \"the person with the blue car is immediately to the right of the person who owns an apple.\" By methodically combining all clues, you should be able to arrive at the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Fruit: apple, banana\n2. Vehicle: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who owns the bicycle is directly to the left of the person who has a banana.\n2. The banana owner does not live next to the person who uses the scooter.\n3. The person who has the apple is positioned immediately to the right of the individual who owns the bicycle.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:\n- Each key is a category name (e.g., \"Fruit\", \"Vehicle\").\n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).\n- Each item in a category must appear exactly once.",
+    "evolution_method": "complexity",
+    "seed_index": 0,
+    "status": "generated",
+    "verification_status": "execution_failed",
+    "categories": [
+      "Fruit",
+      "Vehicle"
+    ],
+    "items": {
+      "Fruit": [
+        "apple",
+        "banana"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "scooter"
+      ]
+    },
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_puzzle():\n    problem = Problem()\n    \n    categories = ['Fruit', 'Vehicle']\n    items = {'Fruit': ['apple', 'banana'], 'Vehicle': ['bicycle', 'scooter']}\n    \n    # Add variables\n    for category in categories:\n        for item in items[category]:\n            var_name = f\"{category}:{item}\"\n            problem.addVariable(var_name, [0, 1])\n    \n    # Category constraints\n    for category in categories:\n        cat_vars = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), cat_vars)\n    \n    # Add clue constraints\n    # 1. The person who owns the bicycle is directly to the left of the person who has a banana.\n    problem.addConstraint(lambda b, ba: b + 1 == ba, (\"Vehicle:bicycle\", \"Fruit:banana\"))\n    \n    # 2. The banana owner does not live next to the person who uses the scooter.\n    problem.addConstraint(lambda ba, s: abs(ba - s) != 1, (\"Fruit:banana\", \"Vehicle:scooter\"))\n    \n    # 3. The person who has the apple is positioned immediately to the right of the individual who owns the bicycle.\n    problem.addConstraint(lambda a, b: a == b + 1, (\"Fruit:apple\", \"Vehicle:bicycle\"))\n    \n    solutions = problem.getSolutions()\n    if len(solutions) != 1:\n        raise ValueError(f\"Expected 1 solution, got {len(solutions)}\")\n    \n    solution = solutions[0]\n    result = {}\n    for category in categories:\n        result[category] = [\"\", \"\"]\n        for item in items[category]:\n            pos = solution[f\"{category}:{item}\"]\n            result[category][pos] = item\n    \n    return result\n\nprint(solve_puzzle())",
+    "execution_success": false,
+    "execution_output": "Execution error: Expected 1 solution, got 0",
+    "solution": {},
+    "expected_answer": "To solve the 2x2 Einstein logic puzzle step by step, we will analyze the clues and use logical reasoning to determine the attributes of each individual.\n\n### Setup\nWe have two individuals, and we need to assign them one fruit and one vehicle each. The categories and items are:\n- **Fruit**: apple, banana\n- **Vehicle**: bicycle, scooter\n\n### Clues\n1. The person who owns the bicycle is directly to the left of the person who has a banana.\n2. The banana owner does not live next to the person who uses the scooter.\n3. The person who has the apple is positioned immediately to the right of the individual who owns the bicycle.\n\n### Step-by-Step Reasoning\n\n1. **Analyzing Clue 1**: \n   - The person with the bicycle (let's call them Person 1) is to the left of the person with the banana (Person 2). This means the arrangement must be:\n     - Person 1 (bicycle) - Person 2 (banana)\n\n2. **Analyzing Clue 2**: \n   - The banana owner (Person 2) does not live next to the person who uses the scooter. Since Person 1 is next to Person 2, Person 1 cannot have the scooter. Therefore, Person 1 must have the bicycle, and Person 2 must have the banana. This means:\n     - Person 1: bicycle\n     - Person 2: banana\n   - Since Person 1 cannot have the scooter, they must have the bicycle.\n\n3. **Analyzing Clue 3**: \n   - The person who has the apple is immediately to the right of the individual who owns the bicycle. Since we have established that Person 1 has the bicycle, Person 2 must have the apple. Thus:\n     - Person 1: bicycle\n     - Person 2: banana\n   - This means Person 1 cannot have the apple, and since Person 2 has the banana, Person 1 must have the apple.\n\n4. **Final Arrangement**:\n   - From the clues, we can summarize:\n     - Person 1: bicycle, apple\n     - Person 2: scooter, banana\n\n### Conclusion\nNow we can summarize the final arrangement in the required output format:\n\n```json\n{\"Fruit\": [\"apple\", \"banana\"], \"Vehicle\": [\"bicycle\", \"scooter\"]}\n``` \n\nThis indicates that the person with the apple is in position 0 (left) and the person with the banana is in position 1 (right), while the person with the bicycle is in position 0 (left) and the person with the scooter is in position 1 (right).",
+    "solvable": false
+  },
+  {
+    "id": "evolved_1",
+    "puzzle_text": "You are given a new logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Occupation: doctor, artist\n2. Dessert: cake, ice cream\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who is a doctor enjoys cake.  \n2. The artist is located immediately to the left of the person who enjoys ice cream. \n\nYour solution should be a dictionary where:\n- Each key is a category name (e.g., \"Dessert\", \"Occupation\").\n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).\n- Each item in a category must appear exactly once.",
+    "evolution_method": "diversity",
+    "seed_index": 1,
+    "status": "generated",
+    "verification_status": "execution_failed",
+    "categories": [
+      "Occupation",
+      "Dessert"
+    ],
+    "items": {
+      "Occupation": [
+        "doctor",
+        "artist"
+      ],
+      "Dessert": [
+        "cake",
+        "ice cream"
+      ]
+    },
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_puzzle():\n    problem = Problem()\n    \n    categories = ['Occupation', 'Dessert']\n    items = {'Occupation': ['doctor', 'artist'], 'Dessert': ['cake', 'ice cream']}\n    \n    # Add variables\n    for category in categories:\n        for item in items[category]:\n            var_name = f\"{category}:{item}\"\n            problem.addVariable(var_name, [0, 1])\n    \n    # Category constraints\n    for category in categories:\n        cat_vars = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), cat_vars)\n    \n    # Clue 1: The person who is a doctor enjoys cake.\n    problem.addConstraint(lambda doctor_pos, cake_pos: doctor_pos == cake_pos, \n                          (f\"Occupation:doctor\", f\"Dessert:cake\"))\n    \n    # Clue 2: The artist is located immediately to the left of the person who enjoys ice cream.\n    problem.addConstraint(lambda artist_pos, ice_cream_pos: artist_pos + 1 == ice_cream_pos, \n                          (f\"Occupation:artist\", f\"Dessert:ice cream\"))\n    \n    solutions = problem.getSolutions()\n    if len(solutions) != 1:\n        raise ValueError(f\"Expected 1 solution, got {len(solutions)}\")\n    \n    solution = solutions[0]\n    result = {}\n    for category in categories:\n        result[category] = [\"\", \"\"]\n        for item in items[category]:\n            pos = solution[f\"{category}:{item}\"]\n            result[category][pos] = item\n    \n    return result\n\nprint(solve_puzzle())",
+    "execution_success": false,
+    "execution_output": "Execution error: Expected 1 solution, got 0",
+    "solution": {},
+    "expected_answer": "Let's solve the puzzle step by step using the clues provided.\n\n### Step 1: Analyze the clues\n\n1. **Clue 1**: The person who is a doctor enjoys cake.\n   - This means that the doctor is associated with cake.\n   - We can denote this as:\n     - Position 1: Doctor - Cake\n     - Position 2: Artist - Ice Cream (since the doctor cannot be in position 2)\n\n2. **Clue 2**: The artist is located immediately to the left of the person who enjoys ice cream.\n   - This means that the artist must be in position 1 and the person who enjoys ice cream must be in position 2.\n\n### Step 2: Set up the positions\n\nFrom the clues, we can set up the positions as follows:\n\n- **Position 1**: Artist\n- **Position 2**: Ice Cream\n\nNow, since the doctor enjoys cake (from Clue 1), we can deduce:\n\n- **Position 1**: Artist - Cake\n- **Position 2**: Doctor - Ice Cream\n\nHowever, this contradicts Clue 1, which states that the doctor enjoys cake. Therefore, we need to revise our understanding.\n\n### Step 3: Correctly assign the attributes\n\nFrom Clue 1, we know:\n- **Position 1**: Doctor - Cake\n- **Position 2**: Artist - Ice Cream\n\nThis setup satisfies both clues:\n- The doctor enjoys cake (Clue 1).\n- The artist is to the left of the person who enjoys ice cream (Clue 2).\n\n### Step 4: Finalize the solution\n\nNow we can summarize our findings in the required format:\n\n- **Occupation**: \n  - Position 1: Doctor\n  - Position 2: Artist\n\n- **Dessert**: \n  - Position 1: Cake\n  - Position 2: Ice Cream\n\n### Final Answer\n\nThe final answer in the required format is:\n\n```json\n{\"Occupation\": [\"doctor\", \"artist\"], \"Dessert\": [\"cake\", \"ice cream\"]}\n```",
+    "solvable": false
+  },
+  {
+    "id": "evolved_2",
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, 'the person with the blue house is immediately to the left of the person who drinks tea'. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Hobby: painting, hiking\n2. Favorite Food: pasta, sushi\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting has a favorite food that is not pasta.\n2. The person who loves sushi is immediately to the left of the person who enjoys hiking.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:\n- Each key is a category name (e.g., \"Hobby\", \"Favorite Food\").\n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).\n- Each item in a category must appear exactly once.",
+    "evolution_method": "reasoning",
+    "seed_index": 2,
+    "status": "generated",
+    "verification_status": "success",
+    "categories": [
+      "Hobby",
+      "Favorite Food"
+    ],
+    "items": {
+      "Hobby": [
+        "painting",
+        "hiking"
+      ],
+      "Favorite Food": [
+        "pasta",
+        "sushi"
+      ]
+    },
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_puzzle():\n    problem = Problem()\n    \n    categories = ['Hobby', 'Favorite Food']\n    items = {'Hobby': ['painting', 'hiking'], 'Favorite Food': ['pasta', 'sushi']}\n    \n    # Add variables\n    for category in categories:\n        for item in items[category]:\n            var_name = f\"{category}:{item}\"\n            problem.addVariable(var_name, [0, 1])\n    \n    # Category constraints\n    for category in categories:\n        cat_vars = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), cat_vars)\n    \n    # Clue constraints\n    # 1. The person who enjoys painting has a favorite food that is not pasta.\n    problem.addConstraint(lambda painting_pos, pasta_pos: painting_pos != pasta_pos, \n                          (\"Hobby:painting\", \"Favorite Food:pasta\"))\n    \n    # 2. The person who loves sushi is immediately to the left of the person who enjoys hiking.\n    problem.addConstraint(lambda sushi_pos, hiking_pos: sushi_pos + 1 == hiking_pos, \n                          (\"Favorite Food:sushi\", \"Hobby:hiking\"))\n    \n    solutions = problem.getSolutions()\n    if len(solutions) != 1:\n        raise ValueError(f\"Expected 1 solution, got {len(solutions)}\")\n    \n    solution = solutions[0]\n    result = {}\n    for category in categories:\n        result[category] = [\"\", \"\"]\n        for item in items[category]:\n            pos = solution[f\"{category}:{item}\"]\n            result[category][pos] = item\n    \n    return result\n\nprint(solve_puzzle())",
+    "execution_success": true,
+    "execution_output": "{'Hobby': ['painting', 'hiking'], 'Favorite Food': ['sushi', 'pasta']}",
+    "solution": {
+      "Hobby": [
+        "painting",
+        "hiking"
+      ],
+      "Favorite Food": [
+        "sushi",
+        "pasta"
+      ]
+    },
+    "expected_answer": "To solve the 2x2 Einstein logic puzzle step by step, we will analyze the clues and use logical reasoning to determine the attributes of each person.\n\n### Step 1: Analyze the Clues\n\n1. **Clue 1**: The person who enjoys painting has a favorite food that is not pasta.\n   - This means that if one person enjoys painting, their favorite food must be sushi.\n\n2. **Clue 2**: The person who loves sushi is immediately to the left of the person who enjoys hiking.\n   - This indicates a positional relationship: if one person loves sushi, they must be in position 1 (left) and the person who enjoys hiking must be in position 2 (right).\n\n### Step 2: Set Up the Positions\n\nWe have two positions (1 and 2) for two people. Let's denote them as follows:\n\n- Position 1: Person A\n- Position 2: Person B\n\n### Step 3: Apply the Clues\n\nFrom **Clue 2**, if the person who loves sushi is in position 1, then:\n\n- Person A (Position 1) loves sushi.\n- Person B (Position 2) enjoys hiking.\n\nNow, we can use **Clue 1**:\n\n- Since Person A loves sushi, according to Clue 1, they cannot have pasta as their favorite food. Therefore, Person A's favorite food must be sushi.\n- This means Person B's favorite food must be pasta (the only remaining option).\n\n### Step 4: Assign the Hobbies\n\nNow we have:\n\n- Person A (Position 1): Loves sushi, must enjoy painting (since they cannot have pasta).\n- Person B (Position 2): Loves pasta, must enjoy hiking.\n\n### Step 5: Final Assignments\n\nNow we can summarize the findings:\n\n- **Hobby**:\n  - Position 1: Painting (Person A)\n  - Position 2: Hiking (Person B)\n\n- **Favorite Food**:\n  - Position 1: Sushi (Person A)\n  - Position 2: Pasta (Person B)\n\n### Final Output\n\nNow we can format the final answer as required:\n\n```json\n{\"Hobby\": [\"painting\", \"hiking\"], \"Favorite Food\": [\"sushi\", \"pasta\"]}\n```",
+    "solvable": true
+  }
+]
