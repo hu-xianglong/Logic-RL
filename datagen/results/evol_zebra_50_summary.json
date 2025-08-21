@@ -1,0 +1,1452 @@
+[
+  {
+    "id": "evolved_1",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "baker",
+        "gardener"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "kiwi"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (such as profession, favorite fruit, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who is a painter lives immediately to the right of the person who prefers apples.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, gardener  \n2. Favorite Fruit: mango, kiwi  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The gardener stands immediately to the right of the person whose favorite fruit is mango.  \n2. The baker does not like kiwi.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "baker",
+        "gardener"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "kiwi"
+      ]
+    }
+  },
+  {
+    "id": "evolved_2",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Drink"
+    ],
+    "items": {
+      "Profession": [
+        "baker",
+        "painter"
+      ],
+      "Favorite Drink": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, painter  \n2. Favorite Drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea stands immediately to the left of the baker.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "painter",
+        "baker"
+      ],
+      "Favorite Drink": [
+        "tea",
+        "lemonade"
+      ]
+    }
+  },
+  {
+    "id": "evolved_3",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting drinks neither juice nor tea immediately to the right of the person who drinks tea.  \n2. The person who drinks juice is not immediately to the left of the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_4",
+    "evolution_method": "diversity",
+    "categories": [
+      "Specialty",
+      "Vehicle"
+    ],
+    "items": {
+      "Specialty": [
+        "pastries",
+        "grilled dishes"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "scooter"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 chefs working in the same kitchen. Each chef has exactly one attribute from each of 2 different categories. No two chefs share the same attribute from any category. Your task is to determine which attributes belong to which chef based on the given clues. The clues describe relationships between chefs and their attributes. For example, \"the chef who specializes in desserts is immediately to the left of the chef who drives the motorcycle.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Specialty: pastries, grilled dishes  \n2. Vehicle: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The chef who specializes in grilled dishes is immediately to the right of the chef who rides the bicycle.",
+    "solution": {
+      "Specialty": [
+        "pastries",
+        "grilled dishes"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "scooter"
+      ]
+    }
+  },
+  {
+    "id": "evolved_5",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is immediately to the left of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "juice",
+        "tea"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_6",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "kiwi"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: artist, engineer  \n2. Favorite Fruit: mango, kiwi\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes mango is immediately to the right of the artist.  \n2. The engineer does not like kiwi.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Fruit": [
+        "kiwi",
+        "mango"
+      ]
+    }
+  },
+  {
+    "id": "evolved_7",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Vehicle"
+    ],
+    "items": {
+      "Profession": [
+        "baker",
+        "painter"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "motorcycle"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who owns the motorcycle is immediately to the left of the person who works as a baker.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, painter  \n2. Vehicle: bicycle, motorcycle\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who owns the motorcycle is immediately to the left of the baker.",
+    "solution": {
+      "Profession": [
+        "painter",
+        "baker"
+      ],
+      "Vehicle": [
+        "motorcycle",
+        "bicycle"
+      ]
+    }
+  },
+  {
+    "id": "evolved_8",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting does not drink tea.  \n2. The person who drinks juice is immediately to the left of the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "juice",
+        "tea"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_9",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "musician"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "blackberry"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, musician  \n2. Favorite Fruit: mango, blackberry  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who favors mango is not immediately to the right of the architect.  \n2. The musician stands immediately to the left of the person who prefers blackberry.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "musician",
+        "architect"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "blackberry"
+      ]
+    }
+  },
+  {
+    "id": "evolved_10",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "engineer"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, engineer  \n2. Favorite Fruit: apple, banana\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes bananas is immediately to the left of the chef.",
+    "solution": {
+      "Profession": [
+        "engineer",
+        "chef"
+      ],
+      "Favorite Fruit": [
+        "banana",
+        "apple"
+      ]
+    }
+  },
+  {
+    "id": "evolved_11",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea is immediately to the left of the person whose hobby is cycling.  \n2. The person who enjoys painting does not drink juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_12",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite drink"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite drink": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, chef  \n2. Favorite drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The architect\u2019s favorite drink is not immediately to the right of the person who drinks lemonade.  \n2. The person who drinks tea is immediately to the left of the chef.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite drink": [
+        "tea",
+        "lemonade"
+      ]
+    }
+  },
+  {
+    "id": "evolved_13",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "architect"
+      ],
+      "Favorite fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clue. The clue describes a relationship between the people and their attributes. By logically combining the clue, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, architect  \n2. Favorite fruit: apple, banana\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClue:\n\n1. The person who likes bananas is standing immediately to the left of the architect.",
+    "solution": {
+      "Profession": [
+        "chef",
+        "architect"
+      ],
+      "Favorite fruit": [
+        "banana",
+        "apple"
+      ]
+    }
+  },
+  {
+    "id": "evolved_14",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea lives immediately to the left of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_15",
+    "evolution_method": "diversity",
+    "categories": [
+      "Favorite Fruit",
+      "Mode of Transport"
+    ],
+    "items": {
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ],
+      "Mode of Transport": [
+        "bicycle",
+        "scooter"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. There are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Favorite Fruit: apple, banana  \n2. Mode of Transport: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who prefers bananas is standing immediately to the left of the person who rides a scooter.",
+    "solution": {
+      "Favorite Fruit": [
+        "banana",
+        "apple"
+      ],
+      "Mode of Transport": [
+        "bicycle",
+        "scooter"
+      ]
+    }
+  },
+  {
+    "id": "evolved_16",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is immediately to the left of the person whose hobby is painting.  \n2. The person who drinks tea is not the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "juice",
+        "tea"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_17",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Beverage"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "musician"
+      ],
+      "Beverage": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, musician  \n2. Beverage: tea, lemonade  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea lives immediately to the right of the architect.  \n2. The musician does not drink lemonade.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Beverage\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "architect",
+        "musician"
+      ],
+      "Beverage": [
+        "lemonade",
+        "tea"
+      ]
+    }
+  },
+  {
+    "id": "evolved_18",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "kiwi"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clue. The clue describes a relationship between the positions of people and their attributes. By logically combining the clue, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, artist  \n2. Favorite fruit: mango, kiwi  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClue:\n\n1. The person who likes mango stands immediately to the left of the chef.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:\n- Each key is a category name (e.g., \"Profession\", \"Favorite fruit\").\n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).\n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "chef"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "kiwi"
+      ]
+    }
+  },
+  {
+    "id": "evolved_19",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is somewhere to the right of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_20",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Drink"
+    ],
+    "items": {
+      "Profession": [
+        "gardener",
+        "writer"
+      ],
+      "Favorite Drink": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: gardener, writer  \n2. Favorite Drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who prefers lemonade is not immediately to the right of the gardener.  \n2. The writer stands somewhere to the left of the person who drinks tea.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "writer",
+        "gardener"
+      ],
+      "Favorite Drink": [
+        "lemonade",
+        "tea"
+      ]
+    }
+  },
+  {
+    "id": "evolved_21",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: artist, engineer  \n2. Favorite Fruit: apple, banana\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes bananas is standing immediately to the left of the engineer.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Fruit": [
+        "banana",
+        "apple"
+      ]
+    }
+  },
+  {
+    "id": "evolved_22",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite fruit"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "blueberry"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, chef  \n2. Favorite fruit: mango, blueberry  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The architect lives immediately to the right of the person who prefers mango.  \n2. The chef\u2019s favorite fruit is not blueberry.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "chef",
+        "architect"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "blueberry"
+      ]
+    }
+  },
+  {
+    "id": "evolved_23",
+    "evolution_method": "diversity",
+    "categories": [
+      "Cuisine",
+      "Tool"
+    ],
+    "items": {
+      "Cuisine": [
+        "Japanese",
+        "Mexican"
+      ],
+      "Tool": [
+        "wok",
+        "blender"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 chefs working in the same kitchen. Each chef specializes in exactly one cuisine type and uses exactly one cooking tool. No two chefs share the same cuisine or cooking tool. Your task is to determine which cuisine and which tool belong to which chef based on the given clues.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Cuisine: Japanese, Mexican  \n2. Tool: wok, blender\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The chef who uses the blender is immediately to the left of the Japanese cuisine specialist.",
+    "solution": {
+      "Cuisine": [
+        "Mexican",
+        "Japanese"
+      ],
+      "Tool": [
+        "blender",
+        "wok"
+      ]
+    }
+  },
+  {
+    "id": "evolved_24",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite fruit"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "kiwi"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, chef  \n2. Favorite fruit: mango, kiwi\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The architect lives immediately to the right of the person whose favorite fruit is kiwi.  \n2. The chef's favorite fruit is not mango.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "chef",
+        "architect"
+      ],
+      "Favorite fruit": [
+        "kiwi",
+        "mango"
+      ]
+    }
+  },
+  {
+    "id": "evolved_25",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "painter",
+        "sculptor"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "blueberry"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like profession, favorite fruit, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: painter, sculptor  \n2. Favorite Fruit: mango, blueberry\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The painter is not positioned to the right of the person who likes mango, but they do not share the same position.  \n2. The person who likes blueberry is immediately to the left of the sculptor.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "painter",
+        "sculptor"
+      ],
+      "Favorite Fruit": [
+        "blueberry",
+        "mango"
+      ]
+    }
+  },
+  {
+    "id": "evolved_26",
+    "evolution_method": "diversity",
+    "categories": [
+      "Job Role",
+      "Favorite Snack"
+    ],
+    "items": {
+      "Job Role": [
+        "designer",
+        "analyst"
+      ],
+      "Favorite Snack": [
+        "cookies",
+        "fruit"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 employees working in the same office. Each employee has exactly one attribute from each of 2 different categories. No two employees share the same attribute from any category. Your task is to determine which attributes belong to which employee based on the given clues.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Job Role: designer, analyst  \n2. Favorite Snack: cookies, fruit\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The employee who loves fruit sits immediately to the left of the designer.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Job Role\", \"Favorite Snack\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Job Role": [
+        "analyst",
+        "designer"
+      ],
+      "Favorite Snack": [
+        "fruit",
+        "cookies"
+      ]
+    }
+  },
+  {
+    "id": "evolved_27",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting is not the one who drinks tea.  \n2. The person who drinks juice is immediately to the left of the person whose hobby is cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "juice",
+        "tea"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_28",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "painter",
+        "sculptor"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "kiwi"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: painter, sculptor  \n2. Favorite Fruit: mango, kiwi\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The painter lives immediately to the right of the person whose favorite fruit is mango.  \n2. The favorite fruit of the sculptor is not kiwi.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "sculptor",
+        "painter"
+      ],
+      "Favorite Fruit": [
+        "mango",
+        "kiwi"
+      ]
+    }
+  },
+  {
+    "id": "evolved_29",
+    "evolution_method": "diversity",
+    "categories": [
+      "Vehicle",
+      "Profession"
+    ],
+    "items": {
+      "Vehicle": [
+        "bicycle",
+        "motorcycle"
+      ],
+      "Profession": [
+        "chef",
+        "gardener"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who drives the motorcycle is immediately to the left of the person who works as a chef.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Vehicle: bicycle, motorcycle  \n2. Profession: chef, gardener\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drives the bicycle is immediately to the left of the gardener.",
+    "solution": {
+      "Vehicle": [
+        "bicycle",
+        "motorcycle"
+      ],
+      "Profession": [
+        "chef",
+        "gardener"
+      ]
+    }
+  },
+  {
+    "id": "evolved_30",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Pet"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Pet": [
+        "cat",
+        "parrot"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who owns the cat lives immediately to the left of the person who drinks tea.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Pet: cat, parrot\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea does not own the parrot.  \n2. The person who owns the cat lives immediately to the left of the person who drinks juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Pet\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Pet": [
+        "cat",
+        "parrot"
+      ]
+    }
+  },
+  {
+    "id": "evolved_31",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Drink"
+    ],
+    "items": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Drink": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: artist, engineer  \n2. Favorite Drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks lemonade is not standing immediately to the right of the engineer.  \n2. The artist is somewhere to the left of the person who drinks tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "engineer"
+      ],
+      "Favorite Drink": [
+        "lemonade",
+        "tea"
+      ]
+    }
+  },
+  {
+    "id": "evolved_32",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Vehicle"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "scooter"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \u201cthe person with the red hat is immediately to the left of the person holding the umbrella.\u201d By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, artist  \n2. Vehicle: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who rides the scooter is immediately to the left of the chef.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "chef"
+      ],
+      "Vehicle": [
+        "scooter",
+        "bicycle"
+      ]
+    }
+  },
+  {
+    "id": "evolved_33",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Hobby",
+      "Beverage"
+    ],
+    "items": {
+      "Hobby": [
+        "painting",
+        "cycling"
+      ],
+      "Beverage": [
+        "tea",
+        "juice"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, 'the person who owns the cat lives immediately to the left of the person who drinks tea'. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Hobby: painting, cycling  \n2. Beverage: tea, juice\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting does not drink tea.  \n2. The person who drinks juice lives immediately to the right of the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Hobby\", \"Beverage\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Hobby": [
+        "cycling",
+        "painting"
+      ],
+      "Beverage": [
+        "tea",
+        "juice"
+      ]
+    }
+  },
+  {
+    "id": "evolved_34",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, artist  \n2. Favorite Fruit: apple, banana  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes bananas is immediately to the left of the artist.",
+    "solution": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Favorite Fruit": [
+        "banana",
+        "apple"
+      ]
+    }
+  },
+  {
+    "id": "evolved_35",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, artist  \n2. Favorite Fruit: apple, banana\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes bananas is standing immediately to the left of the chef.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "chef"
+      ],
+      "Favorite Fruit": [
+        "banana",
+        "apple"
+      ]
+    }
+  },
+  {
+    "id": "evolved_36",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is immediately to the left of the person who enjoys painting.  \n2. The person who likes cycling does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "juice",
+        "tea"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_37",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Beverage"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "musician"
+      ],
+      "Favorite Beverage": [
+        "tea",
+        "lemonade"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, musician  \n2. Favorite Beverage: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The architect is standing immediately to the right of the person who prefers lemonade.  \n2. The musician does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Beverage\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "musician",
+        "architect"
+      ],
+      "Favorite Beverage": [
+        "lemonade",
+        "tea"
+      ]
+    }
+  },
+  {
+    "id": "evolved_38",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Dessert"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite Dessert": [
+        "cheesecake",
+        "tiramisu"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle similar to an Einstein puzzle. In this puzzle, there are 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, chef  \n2. Favorite Dessert: cheesecake, tiramisu\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The architect stands immediately to the left of the person whose favorite dessert is tiramisu.",
+    "solution": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite Dessert": [
+        "cheesecake",
+        "tiramisu"
+      ]
+    }
+  },
+  {
+    "id": "evolved_39",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "gardening",
+        "painting"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: gardening, painting  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea lives immediately to the left of the person who enjoys painting.  \n2. The person who enjoys gardening does not drink juice.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "gardening",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_40",
+    "evolution_method": "diversity",
+    "categories": [
+      "Favorite Fruit",
+      "Mode of Transport"
+    ],
+    "items": {
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ],
+      "Mode of Transport": [
+        "bicycle",
+        "skateboard"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 participants standing in a line. Each participant has exactly one attribute from each of 2 different categories. No two participants share the same attribute from any category. Your task is to determine which attributes belong to which participant based on the given clue. The clue describes a positional relationship between the participants and their attributes. By logically combining the clue, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Favorite Fruit: apple, banana  \n2. Mode of Transport: bicycle, skateboard\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClue:\n\nThe person who prefers the bicycle is immediately to the left of the person who loves bananas.",
+    "solution": {
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ],
+      "Mode of Transport": [
+        "bicycle",
+        "skateboard"
+      ]
+    }
+  },
+  {
+    "id": "evolved_41",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is somewhere to the right of the person who enjoys painting.  \n2. The person who drinks tea does not enjoy cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_42",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite fruit"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "musician"
+      ],
+      "Favorite fruit": [
+        "mango",
+        "blueberry"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, musician  \n2. Favorite fruit: mango, blueberry\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who prefers mango is not standing at the leftmost position.  \n2. The architect is immediately to the right of the person who likes blueberry.  \n3. The musician does not like mango.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "musician",
+        "architect"
+      ],
+      "Favorite fruit": [
+        "blueberry",
+        "mango"
+      ]
+    }
+  },
+  {
+    "id": "evolved_43",
+    "evolution_method": "diversity",
+    "categories": [
+      "Favorite Dessert",
+      "Beverage"
+    ],
+    "items": {
+      "Favorite Dessert": [
+        "cheesecake",
+        "brownie"
+      ],
+      "Beverage": [
+        "latte",
+        "espresso"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle. In this puzzle, there are 2 people sitting side by side at a caf\u00e9. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person with the blue jacket is immediately to the left of the person drinking tea.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Favorite Dessert: cheesecake, brownie  \n2. Beverage: latte, espresso\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes cheesecake is immediately to the left of the person who drinks espresso.",
+    "solution": {
+      "Favorite Dessert": [
+        "cheesecake",
+        "brownie"
+      ],
+      "Beverage": [
+        "latte",
+        "espresso"
+      ]
+    }
+  },
+  {
+    "id": "evolved_44",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea is immediately to the left of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "cycling",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_45",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Vehicle"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "artist"
+      ],
+      "Vehicle": [
+        "bicycle",
+        "motorcycle"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, artist  \n2. Vehicle: bicycle, motorcycle\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who rides the motorcycle is immediately to the left of the chef.",
+    "solution": {
+      "Profession": [
+        "artist",
+        "chef"
+      ],
+      "Vehicle": [
+        "motorcycle",
+        "bicycle"
+      ]
+    }
+  },
+  {
+    "id": "evolved_46",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea lives immediately to the left of the person who enjoys cycling.  \n2. The person who enjoys painting does not drink juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "cycling"
+      ]
+    }
+  },
+  {
+    "id": "evolved_47",
+    "evolution_method": "complexity",
+    "categories": [
+      "Beverage",
+      "Pet"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Pet": [
+        "cat",
+        "parrot"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who owns the cat lives immediately to the right of the person who drinks tea.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Pet: cat, parrot\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice does not own the parrot.  \n2. The person who owns the cat lives immediately to the right of the person who drinks tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Pet\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Pet": [
+        "parrot",
+        "cat"
+      ]
+    }
+  },
+  {
+    "id": "evolved_48",
+    "evolution_method": "diversity",
+    "categories": [
+      "Profession",
+      "Favorite Fruit"
+    ],
+    "items": {
+      "Profession": [
+        "chef",
+        "painter"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    },
+    "puzzle_text": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: chef, painter  \n2. Favorite Fruit: apple, banana\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who likes apples is immediately to the left of the painter.",
+    "solution": {
+      "Profession": [
+        "chef",
+        "painter"
+      ],
+      "Favorite Fruit": [
+        "apple",
+        "banana"
+      ]
+    }
+  },
+  {
+    "id": "evolved_49",
+    "evolution_method": "reasoning",
+    "categories": [
+      "Beverage",
+      "Hobby"
+    ],
+    "items": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "painting",
+        "gardening"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, gardening\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea is not the one who enjoys painting.  \n2. The person who enjoys gardening is immediately to the left of the person who drinks juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Beverage": [
+        "tea",
+        "juice"
+      ],
+      "Hobby": [
+        "gardening",
+        "painting"
+      ]
+    }
+  },
+  {
+    "id": "evolved_50",
+    "evolution_method": "complexity",
+    "categories": [
+      "Profession",
+      "Favorite Drink"
+    ],
+    "items": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite Drink": [
+        "tea",
+        "juice"
+      ]
+    },
+    "puzzle_text": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: architect, chef  \n2. Favorite Drink: tea, juice\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea is positioned immediately to the right of the architect.  \n2. The chef does not drink juice.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.",
+    "solution": {
+      "Profession": [
+        "architect",
+        "chef"
+      ],
+      "Favorite Drink": [
+        "juice",
+        "tea"
+      ]
+    }
+  }
+]

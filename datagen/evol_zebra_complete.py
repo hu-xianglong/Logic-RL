@@ -5,10 +5,10 @@ Complete EvolInstruct pipeline for zebra puzzle generation and verification.
 
 import json
 import os
-import pandas as pd
 from dotenv import load_dotenv
 from typing import List, Dict, Any, Tuple
 import openai
+import time
 
 # Load environment variables
 load_dotenv()
@@ -73,8 +73,8 @@ Expected Output Format:
 Your solution should be a dictionary where each key is a category name and each value is a list of items, ordered by position from left to right."""
         ]
     
-    def evolve_puzzle(self, seed_puzzle: str, evolution_method: str = "complexity") -> str:
-        """Evolve a puzzle using different EvolInstruct methods."""
+    def evolve_puzzle(self, seed_puzzle: str, evolution_method: str = "complexity") -> Dict[str, Any]:
+        """Evolve a puzzle using different EvolInstruct methods with intermediate results."""
         
         if evolution_method == "complexity":
             prompt = f"""Please act as an expert Puzzle Creator.
@@ -125,14 +125,37 @@ Requirements:
 
 Create a NEW puzzle following the same format. Return only the puzzle text."""
 
+        # Record intermediate results
+        start_time = time.time()
+        
         response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4.1-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.8,
             max_tokens=1000
         )
         
-        return response.choices[0].message.content.strip()
+        end_time = time.time()
+        
+        return {
+            "evolved_text": response.choices[0].message.content.strip(),
+            "intermediate_data": {
+                "evolution_prompt": prompt,
+                "seed_puzzle": seed_puzzle,
+                "generation_time_seconds": round(end_time - start_time, 2),
+                "model_used": "gpt-4.1-mini",
+                "temperature": 0.8,
+                "max_tokens": 1000,
+                "response_metadata": {
+                    "finish_reason": response.choices[0].finish_reason,
+                    "usage": {
+                        "prompt_tokens": response.usage.prompt_tokens,
+                        "completion_tokens": response.usage.completion_tokens,
+                        "total_tokens": response.usage.total_tokens
+                    }
+                }
+            }
+        }
     
     def generate_evolved_puzzles(self, num_puzzles: int = 6) -> List[Dict[str, Any]]:
         """Generate multiple evolved puzzles using different methods."""
@@ -148,17 +171,18 @@ Create a NEW puzzle following the same format. Return only the puzzle text."""
             print(f"Generating puzzle {i+1}/{num_puzzles} using {method} evolution...")
             
             try:
-                evolved_text = self.evolve_puzzle(seed, method)
+                evolution_result = self.evolve_puzzle(seed, method)
                 
                 evolved_puzzles.append({
                     "id": f"evolved_{i}",
-                    "puzzle_text": evolved_text,
+                    "puzzle_text": evolution_result["evolved_text"],
                     "evolution_method": method,
                     "seed_index": i % len(seed_puzzles),
-                    "status": "generated"
+                    "status": "generated",
+                    "evolution_intermediate": evolution_result["intermediate_data"]
                 })
                 
-                print(f"  ✓ Generated puzzle using {method}")
+                print(f"  ✓ Generated puzzle using {method} in {evolution_result['intermediate_data']['generation_time_seconds']}s")
                 
             except Exception as e:
                 print(f"  ✗ Failed to generate puzzle: {e}")
@@ -168,7 +192,8 @@ Create a NEW puzzle following the same format. Return only the puzzle text."""
                     "evolution_method": method,
                     "seed_index": i % len(seed_puzzles),
                     "status": "failed",
-                    "error": str(e)
+                    "error": str(e),
+                    "evolution_intermediate": {}
                 })
         
         return evolved_puzzles
@@ -218,8 +243,8 @@ class ZebraPuzzleVerifier:
         
         return categories, items
     
-    def generate_solution_code(self, puzzle_text: str, categories: List[str], items: Dict[str, List[str]]) -> str:
-        """Generate Python constraint code to solve the puzzle."""
+    def generate_solution_code(self, puzzle_text: str, categories: List[str], items: Dict[str, List[str]]) -> Dict[str, Any]:
+        """Generate Python constraint code to solve the puzzle with intermediate results."""
         
         prompt = f"""Generate Python code using python-constraint library to solve this 2x2 Einstein logic puzzle:
 
@@ -279,37 +304,70 @@ print(solve_puzzle())
 
 Generate the complete working code with the correct constraint for the clue. Return only executable Python code."""
 
+        start_time = time.time()
+        
         response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4.1-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
             max_tokens=1500
         )
         
+        end_time = time.time()
+        
         code = response.choices[0].message.content.strip()
         
         # Clean up code
+        original_code = code
         if "```python" in code:
             code = code.split("```python")[1].split("```")[0].strip()
         elif "```" in code:
             code = code.split("```")[1].split("```")[0].strip()
         
-        return code
+        return {
+            "code": code,
+            "intermediate_data": {
+                "code_generation_prompt": prompt,
+                "generation_time_seconds": round(end_time - start_time, 2),
+                "model_used": "gpt-4.1-mini",
+                "temperature": 0.2,
+                "max_tokens": 1500,
+                "original_response": original_code,
+                "cleaned_code": code,
+                "response_metadata": {
+                    "finish_reason": response.choices[0].finish_reason,
+                    "usage": {
+                        "prompt_tokens": response.usage.prompt_tokens,
+                        "completion_tokens": response.usage.completion_tokens,
+                        "total_tokens": response.usage.total_tokens
+                    }
+                }
+            }
+        }
     
     def execute_code(self, code: str) -> Tuple[bool, str, Dict]:
         """Execute the generated code and return results."""
         try:
             import io
             from contextlib import redirect_stdout
+            import sys
+            import ast
+            
+            # Prepare globals with constraint module
+            exec_globals = {
+                '__builtins__': __builtins__,
+            }
+            
+            # Import constraint module in the execution context
+            exec("from constraint import Problem, AllDifferentConstraint", exec_globals)
             
             stdout_buffer = io.StringIO()
             with redirect_stdout(stdout_buffer):
-                exec(code, {})
+                exec(code, exec_globals)
             
             output = stdout_buffer.getvalue().strip()
             
             # Parse output as dictionary
-            import ast
             result_dict = ast.literal_eval(output)
             
             if isinstance(result_dict, dict) and len(result_dict) == 2:
@@ -317,11 +375,13 @@ Generate the complete working code with the correct constraint for the clue. Ret
             else:
                 return False, f"Invalid output format: {output}", {}
                 
+        except ImportError as e:
+            return False, f"Import error (is python-constraint installed?): {str(e)}", {}
         except Exception as e:
             return False, f"Execution error: {str(e)}", {}
     
-    def generate_expected_answer(self, puzzle_text: str, categories: List[str], items: Dict[str, List[str]]) -> str:
-        """Generate the expected answer using LLM reasoning."""
+    def generate_expected_answer(self, puzzle_text: str, categories: List[str], items: Dict[str, List[str]]) -> Dict[str, Any]:
+        """Generate the expected answer using LLM reasoning with intermediate results."""
         
         prompt = f"""Solve this 2x2 Einstein logic puzzle step by step:
 
@@ -338,19 +398,41 @@ Think through this logically:
 Provide your reasoning and then the final answer in this exact format:
 {{"Category1": ["item_at_position_0", "item_at_position_1"], "Category2": ["item_at_position_0", "item_at_position_1"]}}"""
 
+        start_time = time.time()
+        
         response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4.1-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
             max_tokens=800
         )
         
-        return response.choices[0].message.content.strip()
+        end_time = time.time()
+        
+        return {
+            "answer_text": response.choices[0].message.content.strip(),
+            "intermediate_data": {
+                "answer_generation_prompt": prompt,
+                "generation_time_seconds": round(end_time - start_time, 2),
+                "model_used": "gpt-4.1-mini",
+                "temperature": 0.1,
+                "max_tokens": 800,
+                "response_metadata": {
+                    "finish_reason": response.choices[0].finish_reason,
+                    "usage": {
+                        "prompt_tokens": response.usage.prompt_tokens,
+                        "completion_tokens": response.usage.completion_tokens,
+                        "total_tokens": response.usage.total_tokens
+                    }
+                }
+            }
+        }
     
     def verify_puzzle(self, puzzle_data: Dict[str, Any]) -> Dict[str, Any]:
         """Complete verification of a puzzle: extract structure, generate code, test execution."""
         
         puzzle_text = puzzle_data["puzzle_text"]
+        verification_start_time = time.time()
         
         if not puzzle_text.strip():
             return {
@@ -362,12 +444,21 @@ Provide your reasoning and then the final answer in this exact format:
                 "code": "",
                 "execution_success": False,
                 "solution": {},
-                "expected_answer": ""
+                "expected_answer": "",
+                "verification_intermediate": {
+                    "verification_time_seconds": round(time.time() - verification_start_time, 2),
+                    "structure_extraction_success": False,
+                    "code_generation_success": False,
+                    "execution_success": False,
+                    "answer_generation_success": False
+                }
             }
         
         try:
             # Extract structure
+            structure_start = time.time()
             categories, items = self.extract_puzzle_structure(puzzle_text)
+            structure_time = round(time.time() - structure_start, 2)
             
             if len(categories) != 2 or any(len(items.get(cat, [])) != 2 for cat in categories):
                 return {
@@ -379,17 +470,35 @@ Provide your reasoning and then the final answer in this exact format:
                     "code": "",
                     "execution_success": False,
                     "solution": {},
-                    "expected_answer": ""
+                    "expected_answer": "",
+                    "verification_intermediate": {
+                        "verification_time_seconds": round(time.time() - verification_start_time, 2),
+                        "structure_extraction_time": structure_time,
+                        "structure_extraction_success": True,
+                        "extracted_categories": categories,
+                        "extracted_items": items,
+                        "code_generation_success": False,
+                        "execution_success": False,
+                        "answer_generation_success": False
+                    }
                 }
             
             # Generate solution code
-            code = self.generate_solution_code(puzzle_text, categories, items)
+            code_result = self.generate_solution_code(puzzle_text, categories, items)
+            code = code_result["code"]
+            code_intermediate = code_result["intermediate_data"]
             
             # Execute code
+            exec_start = time.time()
             execution_success, execution_output, solution = self.execute_code(code)
+            exec_time = round(time.time() - exec_start, 2)
             
             # Generate expected answer
-            expected_answer = self.generate_expected_answer(puzzle_text, categories, items)
+            answer_result = self.generate_expected_answer(puzzle_text, categories, items)
+            expected_answer = answer_result["answer_text"]
+            answer_intermediate = answer_result["intermediate_data"]
+            
+            verification_end_time = time.time()
             
             return {
                 **puzzle_data,
@@ -401,7 +510,24 @@ Provide your reasoning and then the final answer in this exact format:
                 "execution_output": execution_output,
                 "solution": solution,
                 "expected_answer": expected_answer,
-                "solvable": execution_success
+                "solvable": execution_success,
+                "verification_intermediate": {
+                    "verification_time_seconds": round(verification_end_time - verification_start_time, 2),
+                    "structure_extraction_time": structure_time,
+                    "structure_extraction_success": True,
+                    "extracted_categories": categories,
+                    "extracted_items": items,
+                    "code_generation_success": True,
+                    "code_generation_intermediate": code_intermediate,
+                    "execution_time_seconds": exec_time,
+                    "execution_success": execution_success,
+                    "execution_output": execution_output,
+                    "answer_generation_success": True,
+                    "answer_generation_intermediate": answer_intermediate,
+                    "total_api_calls": 2,  # code generation + answer generation
+                    "total_tokens_used": code_intermediate["response_metadata"]["usage"]["total_tokens"] + 
+                                       answer_intermediate["response_metadata"]["usage"]["total_tokens"]
+                }
             }
             
         except Exception as e:
@@ -414,82 +540,127 @@ Provide your reasoning and then the final answer in this exact format:
                 "code": "",
                 "execution_success": False,
                 "solution": {},
-                "expected_answer": ""
+                "expected_answer": "",
+                "verification_intermediate": {
+                    "verification_time_seconds": round(time.time() - verification_start_time, 2),
+                    "structure_extraction_success": False,
+                    "code_generation_success": False,
+                    "execution_success": False,
+                    "answer_generation_success": False,
+                    "error": str(e)
+                }
             }
 
 
 def main():
     """Main pipeline: generate evolved puzzles and verify them."""
     
+    print("Starting main function...")
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY not found in environment")
+    print(f"API key loaded: {api_key[:10]}...")
     
     print("🧩 Starting EvolInstruct Zebra Puzzle Pipeline...")
+    print("Target: Generate 50 successful puzzles")
     
     # Initialize components
     generator = ZebraPuzzleGenerator(api_key)
     verifier = ZebraPuzzleVerifier(api_key)
     
-    # Generate evolved puzzles
-    print("\n=== Phase 1: Generating Evolved Puzzles ===")
-    evolved_puzzles = generator.generate_evolved_puzzles(num_puzzles=3)  # Reduced for testing
+    # We'll generate puzzles in batches until we get 50 successful ones
+    target_successful = 50
+    successful_puzzles = []
+    batch_size = 10
+    total_attempts = 0
+    max_attempts = 500  # Safety limit
     
-    generated_count = len([p for p in evolved_puzzles if p["status"] == "generated"])
-    print(f"Generated {generated_count}/{len(evolved_puzzles)} puzzles successfully")
+    while len(successful_puzzles) < target_successful and total_attempts < max_attempts:
+        remaining = target_successful - len(successful_puzzles)
+        current_batch_size = min(batch_size, remaining * 2)  # Generate extra to account for failures
+        
+        print(f"\n=== Batch {(total_attempts // batch_size) + 1}: Generating {current_batch_size} puzzles ===")
+        print(f"Progress: {len(successful_puzzles)}/{target_successful} successful puzzles")
+        
+        # Generate evolved puzzles
+        evolved_puzzles = generator.generate_evolved_puzzles(num_puzzles=current_batch_size)
     
-    # Verify puzzles
-    print("\n=== Phase 2: Verifying Puzzles ===")
-    verified_puzzles = []
-    
-    for i, puzzle in enumerate(evolved_puzzles):
-        print(f"Verifying puzzle {i+1}/{len(evolved_puzzles)}...")
+        generated_count = len([p for p in evolved_puzzles if p["status"] == "generated"])
+        print(f"  Generated {generated_count}/{len(evolved_puzzles)} puzzles in this batch")
         
-        if puzzle["status"] != "generated":
-            print(f"  ⚠️ Skipping failed generation")
-            verified_puzzles.append(puzzle)
-            continue
+        # Verify puzzles
+        print(f"  Verifying {generated_count} puzzles...")
         
-        verified_puzzle = verifier.verify_puzzle(puzzle)
-        verified_puzzles.append(verified_puzzle)
-        
-        status = verified_puzzle["verification_status"]
-        if status == "success":
-            print(f"  ✅ Verification successful - puzzle is solvable")
-        else:
-            print(f"  ❌ Verification failed: {status}")
+        for i, puzzle in enumerate(evolved_puzzles):
+            if puzzle["status"] != "generated":
+                continue
+                
+            verified_puzzle = verifier.verify_puzzle(puzzle)
+            
+            status = verified_puzzle["verification_status"]
+            if status == "success" and verified_puzzle.get("solvable", False):
+                successful_puzzles.append(verified_puzzle)
+                print(f"    ✅ Puzzle {len(successful_puzzles)}: {verified_puzzle['evolution_method']} - SUCCESSFUL")
+                
+                # Break early if we've reached our target
+                if len(successful_puzzles) >= target_successful:
+                    print(f"\n🎉 Target reached: {target_successful} successful puzzles!")
+                    break
+            
+            total_attempts += 1
     
     # Results summary
-    print("\n=== Results Summary ===")
-    successful_verifications = [p for p in verified_puzzles if p.get("verification_status") == "success"]
-    solvable_puzzles = [p for p in verified_puzzles if p.get("solvable", False)]
+    print("\n=== Final Results Summary ===")
+    print(f"Total successful puzzles: {len(successful_puzzles)}/{target_successful}")
+    print(f"Total attempts: {total_attempts}")
+    print(f"Success rate: {len(successful_puzzles)/max(total_attempts, 1)*100:.1f}%")
     
-    print(f"Total puzzles: {len(verified_puzzles)}")
-    print(f"Successfully generated: {generated_count}")
-    print(f"Successfully verified: {len(successful_verifications)}")
-    print(f"Solvable puzzles: {len(solvable_puzzles)}")
+    # Count by evolution method
+    method_counts = {}
+    for puzzle in successful_puzzles:
+        method = puzzle.get('evolution_method', 'unknown')
+        method_counts[method] = method_counts.get(method, 0) + 1
+    
+    print("\nBreakdown by evolution method:")
+    for method, count in method_counts.items():
+        print(f"  {method}: {count} puzzles")
+    
+    # Calculate performance statistics
+    if successful_puzzles:
+        total_generation_time = sum(p.get("evolution_intermediate", {}).get("generation_time_seconds", 0) 
+                                   for p in successful_puzzles)
+        total_verification_time = sum(p.get("verification_intermediate", {}).get("verification_time_seconds", 0) 
+                                     for p in successful_puzzles)
+        total_tokens = sum(p.get("verification_intermediate", {}).get("total_tokens_used", 0) 
+                          for p in successful_puzzles if p.get("verification_intermediate"))
+        
+        print(f"\n=== Performance Metrics ===")
+        print(f"Total generation time: {total_generation_time:.2f}s")
+        print(f"Total verification time: {total_verification_time:.2f}s")
+        print(f"Total API tokens used: {total_tokens}")
+        print(f"Average time per successful puzzle: {(total_generation_time + total_verification_time) / len(successful_puzzles):.2f}s")
     
     # Save results
     os.makedirs("./results", exist_ok=True)
     
     # Save detailed results
-    output_file = "./results/evol_zebra_complete.json"
+    output_file = "./results/evol_zebra_50_complete.json"
     with open(output_file, 'w') as f:
-        json.dump(verified_puzzles, f, indent=2)
-    print(f"Saved detailed results to {output_file}")
+        json.dump(successful_puzzles, f, indent=2)
+    print(f"\nSaved {len(successful_puzzles)} successful puzzles to {output_file}")
     
-    # Save summary of successful puzzles
-    if solvable_puzzles:
-        summary_file = "./results/evol_zebra_summary.json"
+    # Save summary
+    if successful_puzzles:
+        summary_file = "./results/evol_zebra_50_summary.json"
         summary_data = []
         
-        for puzzle in solvable_puzzles:
+        for i, puzzle in enumerate(successful_puzzles, 1):
             summary_data.append({
-                "id": puzzle["id"],
+                "id": f"evolved_{i}",
                 "evolution_method": puzzle["evolution_method"],
                 "categories": puzzle["categories"],
                 "items": puzzle["items"],
-                "puzzle_text": puzzle["puzzle_text"][:200] + "...",
+                "puzzle_text": puzzle["puzzle_text"],
                 "solution": puzzle["solution"]
             })
         
@@ -497,13 +668,14 @@ def main():
             json.dump(summary_data, f, indent=2)
         print(f"Saved summary to {summary_file}")
         
-        # Show example
-        example = solvable_puzzles[0]
-        print(f"\n=== Example Solvable Puzzle ===")
-        print(f"Method: {example['evolution_method']}")
-        print(f"Categories: {example['categories']}")
-        print(f"Items: {example['items']}")
-        print(f"Solution: {example['solution']}")
+        # Show a few examples
+        print(f"\n=== Example Successful Puzzles ===")
+        for i in range(min(3, len(successful_puzzles))):
+            example = successful_puzzles[i]
+            print(f"\nPuzzle {i+1}:")
+            print(f"  Method: {example['evolution_method']}")
+            print(f"  Categories: {example['categories']}")
+            print(f"  Solution: {example['solution']}")
 
 
 if __name__ == "__main__":

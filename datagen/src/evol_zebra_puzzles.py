@@ -15,6 +15,10 @@ from typing import Dict, List, Union, Tuple, Optional
 import random
 import io
 from contextlib import redirect_stdout, redirect_stderr
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 from camel.agents import ChatAgent
 from camel.datagen.evol_instruct import EvolInstructPipeline
@@ -44,20 +48,7 @@ class ZebraEvolInstructTemplates(BaseEvolInstructTemplates):
             ),
             "complexify_clues": (
                 "Replace simple clues with more complex ones. For example:\n"
-                "- Change 'X is at position 1' to 'X is immediately left of Y'\n"
-                "- Change 'X is same as Y' to 'X is between Y and Z'\n"
-                "- Add negation clues like 'X is not Y' or 'X is not at position 1'\n"
-                "Make sure the puzzle remains uniquely solvable."
-            ),
-            "add_indirect_clues": (
-                "Add more clues that require multi-step reasoning. For example:\n"
-                "- 'The person who likes X is next to the person who has Y'\n"
-                "- 'Either X is at position 1 or Y is at position 2, but not both'\n"
-                "- 'The person with X and the person with Y are not adjacent'"
-            ),
-            "increase_clue_distance": (
-                "Make clues refer to items that are further apart logically. Instead of "
-                "directly linking items, use transitive relationships that require more "
+                "- Change 'X is at position 1' to 'X is immediately left of Y'\n" "- Change 'X is same as Y' to 'X is between Y and Z'\n" "- Add negation clues like 'X is not Y' or 'X is not at position 1'\n" "Make sure the puzzle remains uniquely solvable."), "add_indirect_clues": ("Add more clues that require multi-step reasoning. For example:\n" "- 'The person who likes X is next to the person who has Y'\n" "- 'Either X is at position 1 or Y is at position 2, but not both'\n" "- 'The person with X and the person with Y are not adjacent'"), "increase_clue_distance": ("Make clues refer to items that are further apart logically. Instead of " "directly linking items, use transitive relationships that require more "
                 "deduction steps to connect."
             ),
             "add_numeric_constraints": (
@@ -301,9 +292,19 @@ def save_evolved_puzzles(results: List, output_path: str, agent: ChatAgent):
     for i, generations in enumerate(results):
         print(f"Processing evolved puzzle {i+1}/{len(results)}...")
         
+        # Check if generations is empty
+        if not generations:
+            print(f"  ⚠️ No generations found for puzzle {i+1}, skipping...")
+            continue
+            
         # Get the best puzzle from the last generation
         last_gen_key = max(generations.keys())
         last_generation = generations[last_gen_key]
+        
+        # Check if last generation is empty
+        if not last_generation:
+            print(f"  ⚠️ No candidates in last generation for puzzle {i+1}, skipping...")
+            continue
         
         # Find the best candidate
         best_candidate = max(
@@ -426,7 +427,7 @@ def main():
     
     # Strategy 1: Make puzzles more complex
     print("\n=== Generating complex puzzles ===")
-    evol_spec = ["in-depth", "condense"]
+    evol_spec = ["in_depth", "condense"]  # Use underscore format
     
     results_complex = pipeline.generate(
         prompts=seed_puzzles,
@@ -441,9 +442,9 @@ def main():
         agent
     )
     
-    # Strategy 2: Create variations
+    # Strategy 2: Create variations  
     print("\n=== Generating puzzle variations ===")
-    evol_spec = ["in-breadth", "in-depth", "condense"]
+    evol_spec = ["in_breadth", "condense"]  # Use underscore format
     
     results_variations = pipeline.generate(
         prompts=seed_puzzles[:3],  # Use fewer seeds for variations
