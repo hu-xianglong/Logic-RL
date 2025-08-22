@@ -1,0 +1,111 @@
+{
+  "description": "Sample puzzles from the processed parquet files",
+  "train_samples": [
+    {
+      "sample_number": 1,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (such as profession, favorite fruit, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who is a painter lives immediately to the right of the person who prefers apples.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, gardener  \n2. Favorite Fruit: mango, kiwi  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The gardener stands immediately to the right of the person whose favorite fruit is mango.  \n2. The baker does not like kiwi.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Profession\": [\"baker\", \"gardener\"], \"Favorite Fruit\": [\"mango\", \"kiwi\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (such as profession, favorite fruit, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. For example, \"the person who is a painter lives immediately to the right of the person who prefers apples.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, gardener  \n2. Favorite Fruit: mango, kiwi  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The gardener stands immediately to the right of the person whose favorite fruit is mango.  \n2. The baker does not like kiwi.  \n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Fruit\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once."
+    },
+    {
+      "sample_number": 2,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, painter  \n2. Favorite Drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea stands immediately to the left of the baker.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Profession\": [\"painter\", \"baker\"], \"Favorite Drink\": [\"tea\", \"lemonade\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given a logic puzzle involving 2 people standing in a line. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Profession: baker, painter  \n2. Favorite Drink: tea, lemonade\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks tea stands immediately to the left of the baker.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Profession\", \"Favorite Drink\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once."
+    },
+    {
+      "sample_number": 3,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting drinks neither juice nor tea immediately to the right of the person who drinks tea.  \n2. The person who drinks juice is not immediately to the left of the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Beverage\": [\"tea\", \"juice\"], \"Hobby\": [\"cycling\", \"painting\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories. No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling  \n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who enjoys painting drinks neither juice nor tea immediately to the right of the person who drinks tea.  \n2. The person who drinks juice is not immediately to the left of the person who enjoys cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once."
+    },
+    {
+      "sample_number": 4,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given a logic puzzle involving 2 chefs working in the same kitchen. Each chef has exactly one attribute from each of 2 different categories. No two chefs share the same attribute from any category. Your task is to determine which attributes belong to which chef based on the given clues. The clues describe relationships between chefs and their attributes. For example, \"the chef who specializes in desserts is immediately to the left of the chef who drives the motorcycle.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Specialty: pastries, grilled dishes  \n2. Vehicle: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The chef who specializes in grilled dishes is immediately to the right of the chef who rides the bicycle.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Specialty\": [\"pastries\", \"grilled dishes\"], \"Vehicle\": [\"bicycle\", \"scooter\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given a logic puzzle involving 2 chefs working in the same kitchen. Each chef has exactly one attribute from each of 2 different categories. No two chefs share the same attribute from any category. Your task is to determine which attributes belong to which chef based on the given clues. The clues describe relationships between chefs and their attributes. For example, \"the chef who specializes in desserts is immediately to the left of the chef who drives the motorcycle.\" By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Specialty: pastries, grilled dishes  \n2. Vehicle: bicycle, scooter\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The chef who specializes in grilled dishes is immediately to the right of the chef who rides the bicycle."
+    },
+    {
+      "sample_number": 5,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is immediately to the left of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Beverage\": [\"juice\", \"tea\"], \"Hobby\": [\"cycling\", \"painting\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is immediately to the left of the person who enjoys painting.  \n2. The person who enjoys cycling does not drink tea.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once."
+    }
+  ],
+  "test_samples": [
+    {
+      "sample_number": 1,
+      "data_source": "evol_zebra_n2_m2",
+      "prompt": [
+        {
+          "content": "<|im_start|>system\nYou are a helpful assistant. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think><answer> answer here </answer>. Now the user asks you to solve an Einstein logic puzzle. After thinking, when you finally reach a conclusion, clearly state the solution within <answer> </answer> tags in the required format.\n<|im_end|>\n<|im_start|>user\nYou are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is somewhere to the right of the person who enjoys painting.  \n2. The person who drinks tea does not enjoy cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once.\n<|im_end|>\n<|im_start|>assistant\n<think>",
+          "role": "user"
+        }
+      ],
+      "ability": "logic",
+      "reward_model": {
+        "ground_truth": "{\"Beverage\": [\"tea\", \"juice\"], \"Hobby\": [\"painting\", \"cycling\"]}",
+        "style": "rule"
+      },
+      "puzzle_text_extracted": "You are given an Einstein logic puzzle. In this puzzle, there are 2 people living in the same community. Each person has exactly one attribute from each of 2 different categories (like nationality, pet, drink, etc.). No two people share the same attribute from any category. Your task is to determine which attributes belong to which person based on the given clues. The clues describe relationships between people and their attributes. By logically combining all clues, you should be able to determine the complete solution.\n\nSetup:\n\nThe puzzle involves the following categories, each with 2 unique items:\n\n1. Beverage: tea, juice  \n2. Hobby: painting, cycling\n\nEach category has exactly 2 items, and no item repeats within a category.\n\nClues:\n\n1. The person who drinks juice is somewhere to the right of the person who enjoys painting.  \n2. The person who drinks tea does not enjoy cycling.\n\nExpected Output Format:\n\nYour solution should be a dictionary where:  \n- Each key is a category name (e.g., \"Beverage\", \"Hobby\").  \n- Each value is a list of items, ordered by position from left to right (position 1 to position 2).  \n- Each item in a category must appear exactly once."
+    }
+  ],
+  "summary": {
+    "total_train_samples": 40,
+    "total_test_samples": 1,
+    "samples_shown": {
+      "train": 5,
+      "test": 1
+    }
+  }
+}

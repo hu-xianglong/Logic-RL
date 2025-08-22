@@ -12,33 +12,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def parse_solution_from_markdown(table_markdown):
-    """Parse the solution from markdown table format to dictionary format."""
-    lines = table_markdown.strip().split('\n')
-    if len(lines) < 3:
-        return None
-    
-    # Skip header separator line
-    header_line = lines[0]
-    data_lines = lines[2:]  # Skip the separator line
-    
-    # Extract position headers (1, 2, 3, etc.)
-    positions = header_line.split('|')[2:-1]  # Skip first empty and last empty
-    positions = [pos.strip() for pos in positions]
-    
-    solution = {}
-    for line in data_lines:
-        parts = line.split('|')
-        if len(parts) < 3:
-            continue
-        category = parts[1].strip()
-        values = [part.strip() for part in parts[2:-1]]  # Skip first empty and last empty
-        if category and values:
-            solution[category] = values
-    
-    return solution
-
-
 def make_prefix(question, template_type):
     """Create the prompt prefix based on template type."""
     if template_type == 'base':
@@ -138,128 +111,6 @@ def load_puzzles_by_level(einstein_batch_dir, max_puzzles_per_batch=50):
     return levels
 
 
-def analyze_token_distribution_by_level(levels, tokenizer_name="microsoft/DialoGPT-medium", template_type='qwen-instruct'):
-    """Analyze token distribution for each level separately."""
-    print(f"\nAnalyzing token distribution by level with tokenizer: {tokenizer_name}")
-    
-    try:
-        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
-    except Exception as e:
-        print(f"Warning: Could not load tokenizer {tokenizer_name}: {e}")
-        print("Skipping token analysis")
-        return
-    
-    level_stats = {}
-    
-    for level_key, level_data in levels.items():
-        puzzles = level_data['puzzles']
-        token_counts = []
-        
-        print(f"\nProcessing level {level_key}...")
-        
-        for i, puzzle in enumerate(tqdm(puzzles, desc=f"Tokenizing {level_key}")):
-            question = puzzle['question']
-            if not question:
-                continue
-                
-            prompt = make_prefix(question, template_type)
-            tokens = tokenizer.encode(str(prompt), add_special_tokens=True)
-            token_count = len(tokens)
-            token_counts.append(token_count)
-            
-            # Show one example per level
-            if i == 0:
-                print(f"\nExample from {level_key}:")
-                print(f"N attributes: {puzzle['n_attributes']}, M objects: {puzzle['m_objects']}")
-                print(f"Difficulty score: {puzzle['difficulty_score']}")
-                print(f"Question preview: {question[:200]}...")
-                print(f"Token count: {token_count}")
-        
-        if not token_counts:
-            print(f"No valid token counts found for {level_key}")
-            continue
-        
-        # Calculate statistics for this level
-        stats = {
-            'level': level_key,
-            'n_attributes': level_data['n_attributes'],
-            'm_objects': level_data['m_objects'],
-            'difficulty_score': level_data['difficulty_score'],
-            'count': len(token_counts),
-            'mean': np.mean(token_counts),
-            'std': np.std(token_counts),
-            'min': np.min(token_counts),
-            'max': np.max(token_counts),
-            'median': np.median(token_counts),
-            'p25': np.percentile(token_counts, 25),
-            'p75': np.percentile(token_counts, 75),
-            'p90': np.percentile(token_counts, 90),
-            'p95': np.percentile(token_counts, 95),
-            'p99': np.percentile(token_counts, 99)
-        }
-        
-        level_stats[level_key] = stats
-        
-        print(f"\n{level_key} Statistics:")
-        print(f"Count:      {stats['count']:,}")
-        print(f"Mean:       {stats['mean']:.1f}")
-        print(f"Median:     {stats['median']:.1f}")
-        print(f"Min/Max:    {stats['min']:,} / {stats['max']:,}")
-        print(f"95th %ile:  {stats['p95']:.1f}")
-    
-    # Create comparative plot
-    try:
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-        
-        # Plot 1: Token distribution by level
-        levels_sorted = sorted(level_stats.keys(), key=lambda x: level_stats[x]['difficulty_score'])
-        colors = plt.cm.viridis(np.linspace(0, 1, len(levels_sorted)))
-        
-        for i, level_key in enumerate(levels_sorted):
-            stats = level_stats[level_key]
-            # Get token counts for this level
-            puzzles = levels[level_key]['puzzles']
-            token_counts = []
-            for puzzle in puzzles:
-                prompt = make_prefix(puzzle['question'], template_type)
-                tokens = tokenizer.encode(str(prompt), add_special_tokens=True)
-                token_counts.append(len(tokens))
-            
-            ax1.hist(token_counts, bins=30, alpha=0.6, label=f"{level_key} (diff: {stats['difficulty_score']})", 
-                    color=colors[i], density=True)
-        
-        ax1.set_xlabel('Token Count')
-        ax1.set_ylabel('Density')
-        ax1.set_title('Token Distribution by Difficulty Level')
-        ax1.legend()
-        ax1.grid(True, alpha=0.3)
-        
-        # Plot 2: Mean token count vs difficulty
-        difficulties = [level_stats[level]['difficulty_score'] for level in levels_sorted]
-        means = [level_stats[level]['mean'] for level in levels_sorted]
-        
-        ax2.scatter(difficulties, means, s=100, alpha=0.7)
-        for i, level_key in enumerate(levels_sorted):
-            ax2.annotate(level_key, (difficulties[i], means[i]), 
-                        xytext=(5, 5), textcoords='offset points', fontsize=9)
-        
-        ax2.set_xlabel('Difficulty Score (n_attributes × m_objects)')
-        ax2.set_ylabel('Mean Token Count')
-        ax2.set_title('Token Count vs Difficulty Level')
-        ax2.grid(True, alpha=0.3)
-        
-        plt.tight_layout()
-        plot_path = 'zebra_raw_token_distribution_by_level.png'
-        plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-        print(f"\nComparative plot saved to: {plot_path}")
-        
-    except Exception as e:
-        print(f"Error creating comparative plot: {e}")
-    
-    return level_stats
-
 
 def process_level_datasets(levels, args):
     """Process and save datasets for each level separately."""
@@ -307,17 +158,6 @@ def process_level_datasets(levels, args):
                     "reward_model": {
                         "style": "rule",
                         "ground_truth": ground_truth
-                    },
-                    "extra_info": {
-                        'split': split,
-                        'index': idx,
-                        'batch_source': example['batch_source'],
-                        'puzzle_id': example['id'],
-                        'level': level_key,
-                        'n_attributes': example['n_attributes'],
-                        'm_objects': example['m_objects'],
-                        'difficulty_score': example['difficulty_score'],
-                        'metadata': example['metadata']
                     }
                 }
                 return data
@@ -394,14 +234,7 @@ if __name__ == '__main__':
     for level_key, level_data in sorted(levels.items(), key=lambda x: x[1]['difficulty_score']):
         print(f"  {level_key}: {len(level_data['puzzles'])} puzzles (difficulty: {level_data['difficulty_score']})")
     
-    # Analyze token distribution by level
-    level_stats = analyze_token_distribution_by_level(levels, args.tokenizer, args.template_type)
-    
-    if args.analyze_tokens_only:
-        print("Token analysis complete. Exiting (--analyze_tokens_only flag set)")
-        exit(0)
-    
-    # Create main local directory
+   # Create main local directory
     local_dir = os.path.expanduser(args.local_dir)
     os.makedirs(local_dir, exist_ok=True)
     
