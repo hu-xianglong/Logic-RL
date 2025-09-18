@@ -1,0 +1,1047 @@
+[
+  {
+    "puzzle_id": "simple_2x3_87",
+    "puzzle": {
+      "id": "simple_2x3_87",
+      "title": "Einstein Puzzle simple_2x3_87 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.006495583000000027
+      },
+      "clues": [
+        "the person who uses bike for transportation is at position 1 (the leftmost position)",
+        "the person who likes r&b music is at an end position (either leftmost or rightmost)",
+        "the person who likes salsa music is immediately to the right of the person who uses taxi for transportation"
+      ],
+      "categories": [
+        "Music",
+        "Transport"
+      ],
+      "items": {
+        "Music": [
+          "r&b",
+          "ambient",
+          "salsa"
+        ],
+        "Transport": [
+          "bike",
+          "taxi",
+          "car"
+        ]
+      },
+      "ground_truth_solution": "{\"Music\": [\"r&b\", \"ambient\", \"salsa\"], \"Transport\": [\"bike\", \"taxi\", \"car\"]}"
+    },
+    "puzzle_hash": "690b24bdef5f9182cdad502cbff245e9",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Music\", \"Transport\"]\n    items = {\n        \"Music\": [\"r&b\", \"ambient\", \"salsa\"],\n        \"Transport\": [\"bike\", \"taxi\", \"car\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who uses bike for transportation is at position 1 (0-indexed)\n    problem.addConstraint(lambda x: x == 0, [\"Transport:bike\"])\n    \n    # Clue 2: the person who likes r&b music is at an end position (0 or 2)\n    problem.addConstraint(lambda x: x == 0 or x == 2, [\"Music:r&b\"])\n    \n    # Clue 3: the person who likes salsa music is immediately to the right of the person who uses taxi\n    problem.addConstraint(lambda salsa_pos, taxi_pos: salsa_pos == taxi_pos + 1, [\"Music:salsa\", \"Transport:taxi\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Music': ['r&b', 'ambient', 'salsa'], 'Transport': ['bike', 'taxi', 'car']}\n",
+    "success": true,
+    "execution_time": 0.002909,
+    "timestamp": "20250918_085619",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Music': ['r&b', 'ambient', 'salsa'], 'Transport': ['bike', 'taxi', 'car']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_70",
+    "puzzle": {
+      "id": "simple_2x3_70",
+      "title": "Einstein Puzzle simple_2x3_70 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.0029767909999999786
+      },
+      "clues": [
+        "the person who enjoys woodworking is immediately to the right of the person who works as a mechanic",
+        "the person who enjoys skydiving is immediately to the right of the person who enjoys woodworking",
+        "the person who works as a social-worker is at the same position as or to the right of the person who enjoys skydiving"
+      ],
+      "categories": [
+        "Hobby",
+        "Job"
+      ],
+      "items": {
+        "Hobby": [
+          "baking",
+          "woodworking",
+          "skydiving"
+        ],
+        "Job": [
+          "mechanic",
+          "journalist",
+          "social-worker"
+        ]
+      },
+      "ground_truth_solution": "{\"Hobby\": [\"baking\", \"woodworking\", \"skydiving\"], \"Job\": [\"mechanic\", \"journalist\", \"social-worker\"]}"
+    },
+    "puzzle_hash": "e4dd8c7f5be56efd8f679424c4f6ee4f",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3  # 3 houses\n    \n    categories = [\"Hobby\", \"Job\"]\n    items = {\n        \"Hobby\": [\"baking\", \"woodworking\", \"skydiving\"],\n        \"Job\": [\"mechanic\", \"journalist\", \"social-worker\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: woodworking is immediately to the right of mechanic\n    problem.addConstraint(lambda w, m: w == m + 1, [\"Hobby:woodworking\", \"Job:mechanic\"])\n    # Clue 2: skydiving is immediately to the right of woodworking\n    problem.addConstraint(lambda s, w: s == w + 1, [\"Hobby:skydiving\", \"Hobby:woodworking\"])\n    # Clue 3: social-worker is at the same position as or to the right of skydiving\n    problem.addConstraint(lambda sw, s: sw >= s, [\"Job:social-worker\", \"Hobby:skydiving\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Hobby': ['baking', 'woodworking', 'skydiving'], 'Job': ['mechanic', 'journalist', 'social-worker']}\n",
+    "success": true,
+    "execution_time": 0.002573,
+    "timestamp": "20250918_085355",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Hobby': ['baking', 'woodworking', 'skydiving'], 'Job': ['mechanic', 'journalist', 'social-worker']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_34",
+    "puzzle": {
+      "id": "simple_2x3_34",
+      "title": "Einstein Puzzle simple_2x3_34 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.0046002079999999945
+      },
+      "clues": [
+        "the person who likes almond-milk is to the left of the person who uses taxi for transportation (not necessarily immediately)",
+        "the person who uses taxi for transportation is immediately to the left of the person who uses helicopter for transportation",
+        "the person who likes hot-chocolate is immediately to the left of the person who likes tea"
+      ],
+      "categories": [
+        "Beverage",
+        "Transport"
+      ],
+      "items": {
+        "Beverage": [
+          "almond-milk",
+          "hot-chocolate",
+          "tea"
+        ],
+        "Transport": [
+          "jet-ski",
+          "taxi",
+          "helicopter"
+        ]
+      },
+      "ground_truth_solution": "{\"Beverage\": [\"almond-milk\", \"hot-chocolate\", \"tea\"], \"Transport\": [\"jet-ski\", \"taxi\", \"helicopter\"]}"
+    },
+    "puzzle_hash": "548e4f80f54b552ef95cd4cd242a4798",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Beverage\", \"Transport\"]\n    items = {\n        \"Beverage\": [\"almond-milk\", \"hot-chocolate\", \"tea\"],\n        \"Transport\": [\"jet-ski\", \"taxi\", \"helicopter\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who likes almond-milk is to the left of the person who uses taxi for transportation (not necessarily immediately)\n    problem.addConstraint(lambda x, y: x < y, [\"Beverage:almond-milk\", \"Transport:taxi\"])\n    \n    # Clue 2: the person who uses taxi for transportation is immediately to the left of the person who uses helicopter for transportation\n    problem.addConstraint(lambda x, y: x == y - 1, [\"Transport:taxi\", \"Transport:helicopter\"])\n    \n    # Clue 3: the person who likes hot-chocolate is immediately to the left of the person who likes tea\n    problem.addConstraint(lambda x, y: x == y - 1, [\"Beverage:hot-chocolate\", \"Beverage:tea\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Beverage': ['almond-milk', 'hot-chocolate', 'tea'], 'Transport': ['jet-ski', 'taxi', 'helicopter']}\n",
+    "success": true,
+    "execution_time": 0.001739,
+    "timestamp": "20250918_084847",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Beverage': ['almond-milk', 'hot-chocolate', 'tea'], 'Transport': ['jet-ski', 'taxi', 'helicopter']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_31",
+    "puzzle": {
+      "id": "simple_2x3_31",
+      "title": "Einstein Puzzle simple_2x3_31 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.008179417000000022
+      },
+      "clues": [
+        "the person who likes pear is immediately to the right of the person who likes cabbage",
+        "the person who likes cabbage is to the right of the person who uses subway for transportation (not necessarily immediately)",
+        "the person who likes eggplant is adjacent to the person who uses airplane for transportation (either immediately left or right)"
+      ],
+      "categories": [
+        "Food",
+        "Transport"
+      ],
+      "items": {
+        "Food": [
+          "eggplant",
+          "cabbage",
+          "pear"
+        ],
+        "Transport": [
+          "subway",
+          "airplane",
+          "train"
+        ]
+      },
+      "ground_truth_solution": "{\"Food\": [\"eggplant\", \"cabbage\", \"pear\"], \"Transport\": [\"subway\", \"airplane\", \"train\"]}"
+    },
+    "puzzle_hash": "92ca421fb16ea52220b09e1edec2ab8c",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3  # 3 houses\n    \n    categories = [\"Food\", \"Transport\"]\n    items = {\n        \"Food\": [\"eggplant\", \"cabbage\", \"pear\"],\n        \"Transport\": [\"subway\", \"airplane\", \"train\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who likes pear is immediately to the right of the person who likes cabbage\n    problem.addConstraint(lambda cabbage_pos, pear_pos: pear_pos == cabbage_pos + 1,\n                          [\"Food:cabbage\", \"Food:pear\"])\n    \n    # Clue 2: the person who likes cabbage is to the right of the person who uses subway for transportation (not necessarily immediately)\n    problem.addConstraint(lambda subway_pos, cabbage_pos: cabbage_pos > subway_pos,\n                          [\"Transport:subway\", \"Food:cabbage\"])\n    \n    # Clue 3: the person who likes eggplant is adjacent to the person who uses airplane for transportation\n    problem.addConstraint(lambda eggplant_pos, airplane_pos: abs(eggplant_pos - airplane_pos) == 1,\n                          [\"Food:eggplant\", \"Transport:airplane\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Food': ['eggplant', 'cabbage', 'pear'], 'Transport': ['subway', 'airplane', 'train']}\n",
+    "success": true,
+    "execution_time": 0.001391,
+    "timestamp": "20250918_084822",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Food': ['eggplant', 'cabbage', 'pear'], 'Transport': ['subway', 'airplane', 'train']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_91",
+    "puzzle": {
+      "id": "simple_2x3_91",
+      "title": "Einstein Puzzle simple_2x3_91 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.0037672909999999504
+      },
+      "clues": [
+        "the person who likes 7up is to the right of the british person (not necessarily immediately)",
+        "the british person is directly between the person who likes 7up and the pakistani person",
+        "the person who likes coffee is immediately to the right of the person who likes fanta"
+      ],
+      "categories": [
+        "Beverage",
+        "Nationality"
+      ],
+      "items": {
+        "Beverage": [
+          "fanta",
+          "coffee",
+          "7up"
+        ],
+        "Nationality": [
+          "pakistani",
+          "british",
+          "dutch"
+        ]
+      },
+      "ground_truth_solution": "{\"Beverage\": [\"fanta\", \"coffee\", \"7up\"], \"Nationality\": [\"pakistani\", \"british\", \"dutch\"]}"
+    },
+    "puzzle_hash": "d2d30d0c0026fb545d79472478a7a96c",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Beverage\", \"Nationality\"]\n    items = {\n        \"Beverage\": [\"fanta\", \"coffee\", \"7up\"],\n        \"Nationality\": [\"pakistani\", \"british\", \"dutch\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who likes 7up is to the right of the british person (not necessarily immediately)\n    problem.addConstraint(lambda sevenup, british: sevenup > british,\n                          [\"Beverage:7up\", \"Nationality:british\"])\n    \n    # Clue 2: the british person is directly between the person who likes 7up and the pakistani person\n    # That means british is at position between 7up and pakistani\n    # So british is directly between 7up and pakistani: british == 7up + 1 and british == pakistani - 1\n    # or british == pakistani + 1 and british == 7up - 1\n    problem.addConstraint(lambda british, sevenup, pakistani:\n                          (british == sevenup + 1 and british == pakistani - 1) or\n                          (british == pakistani + 1 and british == sevenup - 1),\n                          [\"Nationality:british\", \"Beverage:7up\", \"Nationality:pakistani\"])\n    \n    # Clue 3: the person who likes coffee is immediately to the right of the person who likes fanta\n    problem.addConstraint(lambda coffee, fanta: coffee == fanta + 1,\n                          [\"Beverage:coffee\", \"Beverage:fanta\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Beverage': ['fanta', 'coffee', '7up'], 'Nationality': ['pakistani', 'british', 'dutch']}\n",
+    "success": true,
+    "execution_time": 0.002692,
+    "timestamp": "20250918_085652",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Beverage': ['fanta', 'coffee', '7up'], 'Nationality': ['pakistani', 'british', 'dutch']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_98",
+    "puzzle": {
+      "id": "simple_2x3_98",
+      "title": "Einstein Puzzle simple_2x3_98 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.0047791669999999176
+      },
+      "clues": [
+        "the person who likes spinach is to the left of the person who uses bike for transportation (not necessarily immediately)",
+        "the person who uses bike for transportation is somewhere between the person who likes spinach and the person who uses van for transportation (not necessarily immediately adjacent)",
+        "the person who likes lettuce is to the left of the person who likes tomato (not necessarily immediately)"
+      ],
+      "categories": [
+        "Food",
+        "Transport"
+      ],
+      "items": {
+        "Food": [
+          "spinach",
+          "lettuce",
+          "tomato"
+        ],
+        "Transport": [
+          "scooter",
+          "bike",
+          "van"
+        ]
+      },
+      "ground_truth_solution": "{\"Food\": [\"spinach\", \"lettuce\", \"tomato\"], \"Transport\": [\"scooter\", \"bike\", \"van\"]}"
+    },
+    "puzzle_hash": "7e7eeecaa200281af52ede30152b5058",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Food\", \"Transport\"]\n    items = {\n        \"Food\": [\"spinach\", \"lettuce\", \"tomato\"],\n        \"Transport\": [\"scooter\", \"bike\", \"van\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who likes spinach is to the left of the person who uses bike for transportation\n    problem.addConstraint(lambda spinach_pos, bike_pos: spinach_pos < bike_pos,\n                          [\"Food:spinach\", \"Transport:bike\"])\n    \n    # Clue 2: the person who uses bike for transportation is somewhere between the person who likes spinach and the person who uses van for transportation\n    problem.addConstraint(lambda spinach_pos, bike_pos, van_pos:\n                          (spinach_pos < bike_pos < van_pos) or (van_pos < bike_pos < spinach_pos),\n                          [\"Food:spinach\", \"Transport:bike\", \"Transport:van\"])\n    \n    # Clue 3: the person who likes lettuce is to the left of the person who likes tomato\n    problem.addConstraint(lambda lettuce_pos, tomato_pos: lettuce_pos < tomato_pos,\n                          [\"Food:lettuce\", \"Food:tomato\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Food': ['spinach', 'lettuce', 'tomato'], 'Transport': ['scooter', 'bike', 'van']}\n",
+    "success": true,
+    "execution_time": 0.002624,
+    "timestamp": "20250918_085756",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Food': ['spinach', 'lettuce', 'tomato'], 'Transport': ['scooter', 'bike', 'van']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_6",
+    "puzzle": {
+      "id": "simple_2x3_6",
+      "title": "Einstein Puzzle simple_2x3_6 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.008782790999999998
+      },
+      "clues": [
+        "the person who enjoys singing is immediately to the left of the person who plays soccer",
+        "the person who enjoys board-games is a different person than the person who plays soccer",
+        "the person who plays cricket is to the right of the person who plays baseball (not necessarily immediately)",
+        "the person who plays baseball is adjacent to the person who plays soccer (either immediately left or right)"
+      ],
+      "categories": [
+        "Hobby",
+        "Sport"
+      ],
+      "items": {
+        "Hobby": [
+          "singing",
+          "magic-tricks",
+          "board-games"
+        ],
+        "Sport": [
+          "baseball",
+          "soccer",
+          "cricket"
+        ]
+      },
+      "ground_truth_solution": "{\"Hobby\": [\"singing\", \"magic-tricks\", \"board-games\"], \"Sport\": [\"baseball\", \"soccer\", \"cricket\"]}"
+    },
+    "puzzle_hash": "de2a16ac7ddc0e9fc0ec40a9612c2f46",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Hobby\", \"Sport\"]\n    items = {\n        \"Hobby\": [\"singing\", \"magic-tricks\", \"board-games\"],\n        \"Sport\": [\"baseball\", \"soccer\", \"cricket\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who enjoys singing is immediately to the left of the person who plays soccer\n    problem.addConstraint(lambda singing, soccer: singing == soccer - 1,\n                          [\"Hobby:singing\", \"Sport:soccer\"])\n    \n    # Clue 2: the person who enjoys board-games is a different person than the person who plays soccer\n    problem.addConstraint(lambda board_games, soccer: board_games != soccer,\n                          [\"Hobby:board-games\", \"Sport:soccer\"])\n    \n    # Clue 3: the person who plays cricket is to the right of the person who plays baseball (not necessarily immediately)\n    problem.addConstraint(lambda baseball, cricket: baseball < cricket,\n                          [\"Sport:baseball\", \"Sport:cricket\"])\n    \n    # Clue 4: the person who plays baseball is adjacent to the person who plays soccer (either immediately left or right)\n    problem.addConstraint(lambda baseball, soccer: abs(baseball - soccer) == 1,\n                          [\"Sport:baseball\", \"Sport:soccer\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Hobby': ['singing', 'magic-tricks', 'board-games'], 'Sport': ['baseball', 'soccer', 'cricket']}\n",
+    "success": true,
+    "execution_time": 0.001425,
+    "timestamp": "20250918_084437",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Hobby': ['singing', 'magic-tricks', 'board-games'], 'Sport': ['baseball', 'soccer', 'cricket']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_60",
+    "puzzle": {
+      "id": "simple_2x3_60",
+      "title": "Einstein Puzzle simple_2x3_60 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.004513458000000026
+      },
+      "clues": [
+        "the person who uses subway for transportation is to the left of the person who likes watermelon (not necessarily immediately)",
+        "the person who uses helicopter for transportation is at position 3(the rightmost position)",
+        "the person who likes lime is at position 3(the rightmost position)"
+      ],
+      "categories": [
+        "Food",
+        "Transport"
+      ],
+      "items": {
+        "Food": [
+          "peach",
+          "watermelon",
+          "lime"
+        ],
+        "Transport": [
+          "subway",
+          "quad-bike",
+          "helicopter"
+        ]
+      },
+      "ground_truth_solution": "{\"Food\": [\"peach\", \"watermelon\", \"lime\"], \"Transport\": [\"subway\", \"quad-bike\", \"helicopter\"]}"
+    },
+    "puzzle_hash": "748fd50134b45a4e264a8992991f134f",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Food\", \"Transport\"]\n    items = {\n        \"Food\": [\"peach\", \"watermelon\", \"lime\"],\n        \"Transport\": [\"subway\", \"quad-bike\", \"helicopter\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: subway is to the left of watermelon (not necessarily immediately)\n    problem.addConstraint(lambda subway_pos, watermelon_pos: subway_pos < watermelon_pos,\n                          [\"Transport:subway\", \"Food:watermelon\"])\n    \n    # Clue 2: helicopter is at position 3 (rightmost, index 2)\n    problem.addConstraint(lambda helicopter_pos: helicopter_pos == 2, [\"Transport:helicopter\"])\n    \n    # Clue 3: lime is at position 3 (rightmost, index 2)\n    problem.addConstraint(lambda lime_pos: lime_pos == 2, [\"Food:lime\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Food': ['peach', 'watermelon', 'lime'], 'Transport': ['subway', 'quad-bike', 'helicopter']}\n",
+    "success": true,
+    "execution_time": 0.002917,
+    "timestamp": "20250918_085230",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Food': ['peach', 'watermelon', 'lime'], 'Transport': ['subway', 'quad-bike', 'helicopter']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_82",
+    "puzzle": {
+      "id": "simple_2x3_82",
+      "title": "Einstein Puzzle simple_2x3_82 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.003654959000000013
+      },
+      "clues": [
+        "the person who plays basketball is to the right of the egyptian person (not necessarily immediately)",
+        "the person who plays rugby and the egyptian person are at positions with different parity (one at odd, one at even position)",
+        "the person who plays volleyball is immediately to the left of the person who plays rugby",
+        "the pakistani person is at an odd-numbered position"
+      ],
+      "categories": [
+        "Nationality",
+        "Sport"
+      ],
+      "items": {
+        "Nationality": [
+          "egyptian",
+          "french",
+          "pakistani"
+        ],
+        "Sport": [
+          "volleyball",
+          "rugby",
+          "basketball"
+        ]
+      },
+      "ground_truth_solution": "{\"Nationality\": [\"egyptian\", \"french\", \"pakistani\"], \"Sport\": [\"volleyball\", \"rugby\", \"basketball\"]}"
+    },
+    "puzzle_hash": "4337530cb8efa65e437192026488ac8f",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Nationality\", \"Sport\"]\n    items = {\n        \"Nationality\": [\"egyptian\", \"french\", \"pakistani\"],\n        \"Sport\": [\"volleyball\", \"rugby\", \"basketball\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: basketball is to the right of egyptian (not necessarily immediately)\n    problem.addConstraint(lambda egyptian_pos, basketball_pos: egyptian_pos < basketball_pos,\n                          [\"Nationality:egyptian\", \"Sport:basketball\"])\n    \n    # Clue 2: rugby and egyptian are at positions with different parity\n    problem.addConstraint(lambda rugby_pos, egyptian_pos: (rugby_pos % 2) != (egyptian_pos % 2),\n                          [\"Sport:rugby\", \"Nationality:egyptian\"])\n    \n    # Clue 3: volleyball is immediately to the left of rugby\n    problem.addConstraint(lambda volleyball_pos, rugby_pos: volleyball_pos == rugby_pos - 1,\n                          [\"Sport:volleyball\", \"Sport:rugby\"])\n    \n    # Clue 4: pakistani is at an odd-numbered position (positions are 0-indexed)\n    problem.addConstraint(lambda pakistani_pos: pakistani_pos % 2 == 1,\n                          [\"Nationality:pakistani\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Nationality': ['egyptian', 'pakistani', 'french'], 'Sport': ['volleyball', 'rugby', 'basketball']}\n",
+    "success": true,
+    "execution_time": 0.002704,
+    "timestamp": "20250918_085531",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Nationality': ['egyptian', 'french', 'pakistani'], 'Sport': ['volleyball', 'rugby', 'basketball']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_14",
+    "puzzle": {
+      "id": "simple_2x3_14",
+      "title": "Einstein Puzzle simple_2x3_14 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.004800082999999997
+      },
+      "clues": [
+        "the person who works as a police-officer is at the same position as or to the right of the brazilian person",
+        "the person who works as a police-officer is directly between the brazilian person and the mexican person",
+        "the person who works as a chef is immediately to the right of the person who works as a police-officer"
+      ],
+      "categories": [
+        "Job",
+        "Nationality"
+      ],
+      "items": {
+        "Job": [
+          "musician",
+          "police-officer",
+          "chef"
+        ],
+        "Nationality": [
+          "brazilian",
+          "chinese",
+          "mexican"
+        ]
+      },
+      "ground_truth_solution": "{\"Job\": [\"musician\", \"police-officer\", \"chef\"], \"Nationality\": [\"brazilian\", \"chinese\", \"mexican\"]}"
+    },
+    "puzzle_hash": "c65ba45633f9ca26d64ce409392f4998",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Job\", \"Nationality\"]\n    items = {\n        \"Job\": [\"musician\", \"police-officer\", \"chef\"],\n        \"Nationality\": [\"brazilian\", \"chinese\", \"mexican\"]\n    }\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: police-officer is at the same position as or to the right of brazilian\n    problem.addConstraint(\n        lambda po, br: po >= br,\n        [\"Job:police-officer\", \"Nationality:brazilian\"]\n    )\n    \n    # Clue 2: police-officer is directly between brazilian and mexican\n    # That means police-officer is position between brazilian and mexican\n    # So police-officer is one position away from each, and brazilian and mexican are on opposite sides\n    def between(po, br, mx):\n        return (po == br + 1 and po == mx - 1) or (po == mx + 1 and po == br - 1)\n    problem.addConstraint(\n        between,\n        [\"Job:police-officer\", \"Nationality:brazilian\", \"Nationality:mexican\"]\n    )\n    \n    # Clue 3: chef is immediately to the right of police-officer\n    problem.addConstraint(\n        lambda ch, po: ch == po + 1,\n        [\"Job:chef\", \"Job:police-officer\"]\n    )\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Job': ['musician', 'police-officer', 'chef'], 'Nationality': ['brazilian', 'chinese', 'mexican']}\n",
+    "success": true,
+    "execution_time": 0.00295,
+    "timestamp": "20250918_084553",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Job': ['musician', 'police-officer', 'chef'], 'Nationality': ['brazilian', 'chinese', 'mexican']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_75",
+    "puzzle": {
+      "id": "simple_2x3_75",
+      "title": "Einstein Puzzle simple_2x3_75 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.004314040999999991
+      },
+      "clues": [
+        "the person who plays water-polo is at position 3(the rightmost position)",
+        "the person who likes disco music is immediately to the left of the person who plays golf",
+        "the person who likes rock music is to the right of the person who likes dubstep music (not necessarily immediately)"
+      ],
+      "categories": [
+        "Music",
+        "Sport"
+      ],
+      "items": {
+        "Music": [
+          "disco",
+          "dubstep",
+          "rock"
+        ],
+        "Sport": [
+          "sailing",
+          "golf",
+          "water-polo"
+        ]
+      },
+      "ground_truth_solution": "{\"Music\": [\"disco\", \"dubstep\", \"rock\"], \"Sport\": [\"sailing\", \"golf\", \"water-polo\"]}"
+    },
+    "puzzle_hash": "1789495042d015b9309e3ed4b0f13b49",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Music\", \"Sport\"]\n    items = {\n        \"Music\": [\"disco\", \"dubstep\", \"rock\"],\n        \"Sport\": [\"sailing\", \"golf\", \"water-polo\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who plays water-polo is at position 3 (index 2)\n    problem.addConstraint(lambda x: x == 2, [\"Sport:water-polo\"])\n    \n    # Clue 2: the person who likes disco music is immediately to the left of the person who plays golf\n    problem.addConstraint(lambda disco, golf: disco == golf - 1, [\"Music:disco\", \"Sport:golf\"])\n    \n    # Clue 3: the person who likes rock music is to the right of the person who likes dubstep music (not necessarily immediately)\n    problem.addConstraint(lambda dubstep, rock: dubstep < rock, [\"Music:dubstep\", \"Music:rock\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Music': ['disco', 'dubstep', 'rock'], 'Sport': ['sailing', 'golf', 'water-polo']}\n",
+    "success": true,
+    "execution_time": 0.002919,
+    "timestamp": "20250918_085438",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Music': ['disco', 'dubstep', 'rock'], 'Sport': ['sailing', 'golf', 'water-polo']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_16",
+    "puzzle": {
+      "id": "simple_2x3_16",
+      "title": "Einstein Puzzle simple_2x3_16 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.002070709000000004
+      },
+      "clues": [
+        "the person who uses scooter for transportation is somewhere between the person who likes fantasy movies and the person who uses car for transportation (not necessarily immediately adjacent)",
+        "the person who likes superhero movies is to the left of the person who uses car for transportation (not necessarily immediately)"
+      ],
+      "categories": [
+        "Movie",
+        "Transport"
+      ],
+      "items": {
+        "Movie": [
+          "fantasy",
+          "superhero",
+          "crime"
+        ],
+        "Transport": [
+          "helicopter",
+          "scooter",
+          "car"
+        ]
+      },
+      "ground_truth_solution": "{\"Movie\": [\"fantasy\", \"superhero\", \"crime\"], \"Transport\": [\"helicopter\", \"scooter\", \"car\"]}"
+    },
+    "puzzle_hash": "a3fd66d0e13cf8622f9ad3e0b5dc36b3",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Movie\", \"Transport\"]\n    items = {\n        \"Movie\": [\"fantasy\", \"superhero\", \"crime\"],\n        \"Transport\": [\"helicopter\", \"scooter\", \"car\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1:\n    # the person who uses scooter for transportation is somewhere between the person who likes fantasy movies and the person who uses car for transportation (not necessarily immediately adjacent)\n    # This means scooter position is strictly between fantasy and car positions\n    problem.addConstraint(\n        lambda scooter, fantasy, car: (fantasy < scooter < car) or (car < scooter < fantasy),\n        [\"Transport:scooter\", \"Movie:fantasy\", \"Transport:car\"]\n    )\n    \n    # Clue 2:\n    # the person who likes superhero movies is to the left of the person who uses car for transportation (not necessarily immediately)\n    problem.addConstraint(\n        lambda superhero, car: superhero < car,\n        [\"Movie:superhero\", \"Transport:car\"]\n    )\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Movie': ['fantasy', 'superhero', 'crime'], 'Transport': ['helicopter', 'scooter', 'car']}\n",
+    "success": true,
+    "execution_time": 0.002947,
+    "timestamp": "20250918_084608",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Movie': ['fantasy', 'superhero', 'crime'], 'Transport': ['helicopter', 'scooter', 'car']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_20",
+    "puzzle": {
+      "id": "simple_2x3_20",
+      "title": "Einstein Puzzle simple_2x3_20 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.006949749999999991
+      },
+      "clues": [
+        "the japanese person is to the right of the person who has bird as a pet (not necessarily immediately)",
+        "the italian person is at position 1 (the leftmost position)",
+        "the japanese person is immediately to the right of the person who has hedgehog as a pet"
+      ],
+      "categories": [
+        "Nationality",
+        "Pet"
+      ],
+      "items": {
+        "Nationality": [
+          "italian",
+          "thai",
+          "japanese"
+        ],
+        "Pet": [
+          "bird",
+          "hedgehog",
+          "rat"
+        ]
+      },
+      "ground_truth_solution": "{\"Nationality\": [\"italian\", \"thai\", \"japanese\"], \"Pet\": [\"bird\", \"hedgehog\", \"rat\"]}"
+    },
+    "puzzle_hash": "a84e8e225fd04c0002822441c2a51712",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Nationality\", \"Pet\"]\n    items = {\n        \"Nationality\": [\"italian\", \"thai\", \"japanese\"],\n        \"Pet\": [\"bird\", \"hedgehog\", \"rat\"]\n    }\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the japanese person is to the right of the person who has bird as a pet (not necessarily immediately)\n    problem.addConstraint(lambda jap, bird: jap > bird, [\"Nationality:japanese\", \"Pet:bird\"])\n    \n    # Clue 2: the italian person is at position 1 (leftmost position, index 0)\n    problem.addConstraint(lambda italian: italian == 0, [\"Nationality:italian\"])\n    \n    # Clue 3: the japanese person is immediately to the right of the person who has hedgehog as a pet\n    problem.addConstraint(lambda jap, hedgehog: jap == hedgehog + 1, [\"Nationality:japanese\", \"Pet:hedgehog\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Nationality': ['italian', 'thai', 'japanese'], 'Pet': ['bird', 'hedgehog', 'rat']}\n",
+    "success": true,
+    "execution_time": 0.003087,
+    "timestamp": "20250918_084641",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Nationality': ['italian', 'thai', 'japanese'], 'Pet': ['bird', 'hedgehog', 'rat']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_32",
+    "puzzle": {
+      "id": "simple_2x3_32",
+      "title": "Einstein Puzzle simple_2x3_32 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.007959833
+      },
+      "clues": [
+        "the indonesian person and the person who uses car for transportation are at positions with different parity (one at odd, one at even position)",
+        "the person who uses car for transportation is at the same position as or to the right of the polish person",
+        "the person who uses car for transportation is immediately to the left of the person who uses taxi for transportation",
+        "the person who uses scooter for transportation is at the same position as or to the right of the person who uses taxi for transportation"
+      ],
+      "categories": [
+        "Nationality",
+        "Transport"
+      ],
+      "items": {
+        "Nationality": [
+          "polish",
+          "indonesian",
+          "indian"
+        ],
+        "Transport": [
+          "car",
+          "taxi",
+          "scooter"
+        ]
+      },
+      "ground_truth_solution": "{\"Nationality\": [\"polish\", \"indonesian\", \"indian\"], \"Transport\": [\"car\", \"taxi\", \"scooter\"]}"
+    },
+    "puzzle_hash": "0b6c5b01c5de57d6837bb2c17c662ec4",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Nationality\", \"Transport\"]\n    items = {\n        \"Nationality\": [\"polish\", \"indonesian\", \"indian\"],\n        \"Transport\": [\"car\", \"taxi\", \"scooter\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the indonesian person and the person who uses car for transportation are at positions with different parity\n    problem.addConstraint(lambda x, y: (x % 2) != (y % 2), [\"Nationality:indonesian\", \"Transport:car\"])\n    \n    # Clue 2: the person who uses car for transportation is at the same position as or to the right of the polish person\n    problem.addConstraint(lambda x, y: x >= y, [\"Transport:car\", \"Nationality:polish\"])\n    \n    # Clue 3: the person who uses car for transportation is immediately to the left of the person who uses taxi for transportation\n    problem.addConstraint(lambda x, y: x == y - 1, [\"Transport:car\", \"Transport:taxi\"])\n    \n    # Clue 4: the person who uses scooter for transportation is at the same position as or to the right of the person who uses taxi for transportation\n    problem.addConstraint(lambda x, y: x >= y, [\"Transport:scooter\", \"Transport:taxi\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Nationality': ['polish', 'indonesian', 'indian'], 'Transport': ['car', 'taxi', 'scooter']}\n",
+    "success": true,
+    "execution_time": 0.002212,
+    "timestamp": "20250918_084830",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Nationality': ['polish', 'indonesian', 'indian'], 'Transport': ['car', 'taxi', 'scooter']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_36",
+    "puzzle": {
+      "id": "simple_2x3_36",
+      "title": "Einstein Puzzle simple_2x3_36 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.003946959
+      },
+      "clues": [
+        "the person who has fish as a pet is at the same position as or to the left of the person who has pony as a pet",
+        "the person who likes sports movies and the person who has pony as a pet are at positions with different parity (one at odd, one at even position)",
+        "the person who likes time-travel movies is directly between the person who has fish as a pet and the person who likes family movies"
+      ],
+      "categories": [
+        "Movie",
+        "Pet"
+      ],
+      "items": {
+        "Movie": [
+          "sports",
+          "time-travel",
+          "family"
+        ],
+        "Pet": [
+          "fish",
+          "pony",
+          "lizard"
+        ]
+      },
+      "ground_truth_solution": "{\"Movie\": [\"sports\", \"time-travel\", \"family\"], \"Pet\": [\"fish\", \"pony\", \"lizard\"]}"
+    },
+    "puzzle_hash": "bfdd4f14b2d63b6b3ed44b54e15dde34",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Movie\", \"Pet\"]\n    items = {\n        \"Movie\": [\"sports\", \"time-travel\", \"family\"],\n        \"Pet\": [\"fish\", \"pony\", \"lizard\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: fish is at the same position as or to the left of pony\n    problem.addConstraint(lambda fish_pos, pony_pos: fish_pos <= pony_pos, [\"Pet:fish\", \"Pet:pony\"])\n    \n    # Clue 2: sports movie and pony pet are at positions with different parity\n    problem.addConstraint(lambda sports_pos, pony_pos: (sports_pos % 2) != (pony_pos % 2), [\"Movie:sports\", \"Pet:pony\"])\n    \n    # Clue 3: time-travel movie is directly between fish pet and family movie\n    problem.addConstraint(\n        lambda time_travel_pos, fish_pos, family_pos:\n        (time_travel_pos == fish_pos + 1 and time_travel_pos == family_pos - 1) or\n        (time_travel_pos == family_pos + 1 and time_travel_pos == fish_pos - 1),\n        [\"Movie:time-travel\", \"Pet:fish\", \"Movie:family\"]\n    )\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Movie': ['sports', 'time-travel', 'family'], 'Pet': ['fish', 'pony', 'lizard']}\n",
+    "success": true,
+    "execution_time": 0.003056,
+    "timestamp": "20250918_084902",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Movie': ['sports', 'time-travel', 'family'], 'Pet': ['fish', 'pony', 'lizard']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_40",
+    "puzzle": {
+      "id": "simple_2x3_40",
+      "title": "Einstein Puzzle simple_2x3_40 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.007449457999999992
+      },
+      "clues": [
+        "the person who works as a freelancer is at the same position as or to the left of the person who works as a videographer",
+        "the person who enjoys chess is immediately to the left of the person who enjoys collecting",
+        "the person who works as a videographer is at the same position as or to the left of the person who enjoys chess"
+      ],
+      "categories": [
+        "Hobby",
+        "Job"
+      ],
+      "items": {
+        "Hobby": [
+          "reading",
+          "chess",
+          "collecting"
+        ],
+        "Job": [
+          "freelancer",
+          "videographer",
+          "pilot"
+        ]
+      },
+      "ground_truth_solution": "{\"Hobby\": [\"reading\", \"chess\", \"collecting\"], \"Job\": [\"freelancer\", \"videographer\", \"pilot\"]}"
+    },
+    "puzzle_hash": "31148fc3aa838dc2606c0c82be0c50ac",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Hobby\", \"Job\"]\n    items = {\n        \"Hobby\": [\"reading\", \"chess\", \"collecting\"],\n        \"Job\": [\"freelancer\", \"videographer\", \"pilot\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: freelancer is at the same position as or to the left of videographer\n    problem.addConstraint(lambda f, v: f <= v, [\"Job:freelancer\", \"Job:videographer\"])\n    \n    # Clue 2: chess is immediately to the left of collecting\n    problem.addConstraint(lambda c, col: c == col - 1, [\"Hobby:chess\", \"Hobby:collecting\"])\n    \n    # Clue 3: videographer is at the same position as or to the left of chess\n    problem.addConstraint(lambda v, c: v <= c, [\"Job:videographer\", \"Hobby:chess\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Hobby': ['reading', 'chess', 'collecting'], 'Job': ['freelancer', 'videographer', 'pilot']}\n",
+    "success": true,
+    "execution_time": 0.002236,
+    "timestamp": "20250918_084934",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Hobby': ['reading', 'chess', 'collecting'], 'Job': ['freelancer', 'videographer', 'pilot']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_4",
+    "puzzle": {
+      "id": "simple_2x3_4",
+      "title": "Einstein Puzzle simple_2x3_4 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.0033662910000000004
+      },
+      "clues": [
+        "the person who has fish as a pet is directly between the person who plays handball and the person who has bird as a pet",
+        "the person who has bird as a pet is to the right of the person who plays climbing (not necessarily immediately)"
+      ],
+      "categories": [
+        "Pet",
+        "Sport"
+      ],
+      "items": {
+        "Pet": [
+          "cat",
+          "fish",
+          "bird"
+        ],
+        "Sport": [
+          "handball",
+          "climbing",
+          "basketball"
+        ]
+      },
+      "ground_truth_solution": "{\"Pet\": [\"cat\", \"fish\", \"bird\"], \"Sport\": [\"handball\", \"climbing\", \"basketball\"]}"
+    },
+    "puzzle_hash": "abd521ba4ddd07559913d658895b66f6",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3  # 3 houses\n    \n    categories = [\"Pet\", \"Sport\"]\n    items = {\n        \"Pet\": [\"cat\", \"fish\", \"bird\"],\n        \"Sport\": [\"handball\", \"climbing\", \"basketball\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who has fish as a pet is directly between the person who plays handball and the person who has bird as a pet\n    problem.addConstraint(\n        lambda fish, handball, bird: (fish == handball + 1 and fish == bird - 1) or (fish == bird + 1 and fish == handball - 1),\n        [\"Pet:fish\", \"Sport:handball\", \"Pet:bird\"]\n    )\n    \n    # Clue 2: the person who has bird as a pet is to the right of the person who plays climbing (not necessarily immediately)\n    problem.addConstraint(\n        lambda bird, climbing: bird > climbing,\n        [\"Pet:bird\", \"Sport:climbing\"]\n    )\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Pet': ['cat', 'fish', 'bird'], 'Sport': ['handball', 'climbing', 'basketball']}\n",
+    "success": true,
+    "execution_time": 0.002334,
+    "timestamp": "20250918_084421",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Pet': ['cat', 'fish', 'bird'], 'Sport': ['handball', 'climbing', 'basketball']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_17",
+    "puzzle": {
+      "id": "simple_2x3_17",
+      "title": "Einstein Puzzle simple_2x3_17 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.004173499999999997
+      },
+      "clues": [
+        "the person who likes rock music is directly between the person who likes hip-hop music and the polish person",
+        "the russian person is to the right of the person who likes rock music (not necessarily immediately)"
+      ],
+      "categories": [
+        "Music",
+        "Nationality"
+      ],
+      "items": {
+        "Music": [
+          "soul",
+          "rock",
+          "hip-hop"
+        ],
+        "Nationality": [
+          "polish",
+          "indian",
+          "russian"
+        ]
+      },
+      "ground_truth_solution": "{\"Music\": [\"soul\", \"rock\", \"hip-hop\"], \"Nationality\": [\"polish\", \"indian\", \"russian\"]}"
+    },
+    "puzzle_hash": "75a12966133aa32ab1d88c8a39843de5",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Music\", \"Nationality\"]\n    items = {\n        \"Music\": [\"soul\", \"rock\", \"hip-hop\"],\n        \"Nationality\": [\"polish\", \"indian\", \"russian\"]\n    }\n    \n    # Add variables for each item with domain being the possible positions\n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    # All items in the same category must have different positions\n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: the person who likes rock music is directly between the person who likes hip-hop music and the polish person\n    problem.addConstraint(\n        lambda rock, hiphop, polish: (rock == hiphop + 1 and rock == polish - 1) or (rock == polish + 1 and rock == hiphop - 1),\n        [\"Music:rock\", \"Music:hip-hop\", \"Nationality:polish\"]\n    )\n    \n    # Clue 2: the russian person is to the right of the person who likes rock music (not necessarily immediately)\n    problem.addConstraint(\n        lambda rock, russian: rock < russian,\n        [\"Music:rock\", \"Nationality:russian\"]\n    )\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    # Format the solution as a dictionary\n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Music': ['soul', 'rock', 'hip-hop'], 'Nationality': ['polish', 'indian', 'russian']}\n",
+    "success": true,
+    "execution_time": 0.002797,
+    "timestamp": "20250918_084616",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Music': ['soul', 'rock', 'hip-hop'], 'Nationality': ['polish', 'indian', 'russian']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  },
+  {
+    "puzzle_id": "simple_2x3_88",
+    "puzzle": {
+      "id": "simple_2x3_88",
+      "title": "Einstein Puzzle simple_2x3_88 (2x3, level 12)",
+      "problem": "You are given an Einstein logic puzzle with 3 houses and 2 attributes. Each house has exactly one attribute from each category. No two houses share the same attribute from any category. Your task is to determine which attributes belong to which house based on the given clues.",
+      "source": "generated_simple",
+      "metadata": {
+        "n_attributes": 2,
+        "m_objects": 3,
+        "difficulty_level": 12,
+        "generation_time": 0.009785999999999961
+      },
+      "clues": [
+        "the person who likes sprite and the person who has guinea-pig as a pet are at positions with the same parity (both at odd or both at even positions)",
+        "the person who has hamster as a pet is at the same position as or to the right of the person who has guinea-pig as a pet",
+        "the person who likes tea is to the right of the person who has hamster as a pet (not necessarily immediately)"
+      ],
+      "categories": [
+        "Beverage",
+        "Pet"
+      ],
+      "items": {
+        "Beverage": [
+          "sprite",
+          "fanta",
+          "tea"
+        ],
+        "Pet": [
+          "guinea-pig",
+          "hamster",
+          "hedgehog"
+        ]
+      },
+      "ground_truth_solution": "{\"Beverage\": [\"sprite\", \"fanta\", \"tea\"], \"Pet\": [\"guinea-pig\", \"hamster\", \"hedgehog\"]}"
+    },
+    "puzzle_hash": "e39333ba59397613cf86c0cf187230ca",
+    "code": "from constraint import Problem, AllDifferentConstraint\n\ndef solve_einstein_puzzle():\n    problem = Problem()\n    num_positions = 3\n    \n    categories = [\"Beverage\", \"Pet\"]\n    items = {\n        \"Beverage\": [\"sprite\", \"fanta\", \"tea\"],\n        \"Pet\": [\"guinea-pig\", \"hamster\", \"hedgehog\"]\n    }\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            problem.addVariable(variable_name, range(num_positions))\n    \n    for category in categories:\n        category_items = [f\"{category}:{item}\" for item in items[category]]\n        problem.addConstraint(AllDifferentConstraint(), category_items)\n    \n    # Clue 1: sprite and guinea-pig are at positions with same parity\n    problem.addConstraint(lambda x, y: x % 2 == y % 2, [\"Beverage:sprite\", \"Pet:guinea-pig\"])\n    \n    # Clue 2: hamster is at same position or to the right of guinea-pig\n    problem.addConstraint(lambda x, y: x >= y, [\"Pet:hamster\", \"Pet:guinea-pig\"])\n    \n    # Clue 3: tea is to the right of hamster\n    problem.addConstraint(lambda x, y: x > y, [\"Beverage:tea\", \"Pet:hamster\"])\n    \n    solutions = problem.getSolutions()\n    \n    if not solutions:\n        return None\n    \n    if len(solutions) > 1:\n        raise ValueError(\"Multiple solutions found\")\n    \n    solution = solutions[0]\n    \n    result_dict = {}\n    for category in categories:\n        result_dict[category] = [\"\"] * num_positions\n    \n    for category in categories:\n        for item in items[category]:\n            variable_name = f\"{category}:{item}\"\n            position = solution[variable_name]\n            result_dict[category][position] = item\n    \n    print(result_dict)\n\nsolve_einstein_puzzle()",
+    "execution_result": "{'Beverage': ['sprite', 'fanta', 'tea'], 'Pet': ['guinea-pig', 'hamster', 'hedgehog']}\n",
+    "success": true,
+    "execution_time": 0.002858,
+    "timestamp": "20250918_085626",
+    "verification": {
+      "verified": true,
+      "is_correct": true,
+      "ground_truth": "{'Beverage': ['sprite', 'fanta', 'tea'], 'Pet': ['guinea-pig', 'hamster', 'hedgehog']}",
+      "verification_time": null,
+      "verification_method": null,
+      "verification_notes": null,
+      "feedback": null
+    },
+    "additional_metadata": {
+      "timestamp": "20250918_084345"
+    }
+  }
+]
